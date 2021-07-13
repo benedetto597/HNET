@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Form View Car -->
+    <record id="car_form" model="ir.ui.view">
+        <field name="name">car.form</field>
+        <field name="model">car.car</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="horse_power"/>
+                        <field name="door_number"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View Car -->
+    <record id="car_tree" model="ir.ui.view">
+        <field name="name">car.form</field>
+        <field name="model">car.car</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="horse_power"/>
+                <field name="door_number"/>
+            </tree>
+        </field>
+    </record>
+ 
+    <!-- Action For Car -->
+    <record id="car_action" model="ir.actions.act_window">
+        <field name="name">Cars</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">car.car</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Action For Car -->
+    <!--
+        sequence -> Orden en el que aparece en la lista de aplicaciones 
+        id -> Es el identificador del objeto
+        name -> Es el nombre que se verá en la lista de aplicaciones
+     --> 
+    <menuitem id="car_menu" name="Cars" sequence="200" action="car_action"/>
+    
+    <!-- Si estuviese en otro modelo  
+    <menuitem id="" name="" sequence="" action="model_name.car_action"/>
+     --> 
+     
+</odoo>
