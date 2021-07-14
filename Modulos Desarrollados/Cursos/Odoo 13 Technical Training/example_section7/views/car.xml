@@ -12,6 +12,14 @@
                         <field name="name"/>
                         <field name="horse_power"/>
                         <field name="door_number"/>
+
+                        <!-- Field Many2one -->
+                        <field name="driver_id"/>
+                        <!-- Field Many2many -->
+                        <field name="feature_ids", widget="many2many_tags"/>
+                        <!-- Field compute -->
+                        <field name="total_speed"/>
+                        <field name="random_message"/>
                     </group>
                 </group>
             </form>
@@ -27,6 +35,7 @@
                 <field name="name"/>
                 <field name="horse_power"/>
                 <field name="door_number"/>
+                <field name="driver_id"/>
             </tree>
         </field>
     </record>
@@ -39,7 +48,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <!-- Action For Car -->
+    <!-- Menu For Car -->
     <!--
         sequence -> Orden en el que aparece en la lista de aplicaciones 
         id -> Es el identificador del objeto
