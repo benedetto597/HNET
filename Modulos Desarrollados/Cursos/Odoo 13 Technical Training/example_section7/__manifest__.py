@@ -26,7 +26,8 @@
     'data': [
         # 'security/ir.model.access.csv',
         'views/car.xml',
-        'parking.xml'
+        'views/parking.xml',
+        'views/sequences.xml',
 
     ],
     # only loaded in demonstration mode

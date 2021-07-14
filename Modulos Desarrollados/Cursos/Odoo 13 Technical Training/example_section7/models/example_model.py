@@ -8,7 +8,7 @@
 ----------------------------------------------------------------------------------------------------
 """
 
-from odoo import models, fields
+from odoo import models, fields, api
 
 class Car(models.Model):
     """ Ejemplo seccion 7 """
@@ -32,6 +32,45 @@ class Car(models.Model):
     total_speed = fields.Integer(string="Speed Total", compute="get_total_speed")
     random_message = fields.Char(string="Message", compute="say_hello", readonly="True")
 
+    # 30. Boton en formulario
+    # El primer parámetro es la llave (key), el segudo es el valor de la llave (value)  
+    states = fields.Selection([('new','New'),('used','Used'),('sold','Sold')],string="Status")
+
+    # 31. Secuencias
+    car_sequence = fields.Char(string="Sequence")
+
+    # 31. Secuencias y 36. Sobrescribir método create
+    @api.model
+    def create(self, vals):
+        """ 
+            Se utiliza para crear un registro
+            Sobrescritura del metodo create 
+            Funcionalidad de la sequencia car_sequence
+            Los campos que se encuentran en el Modelo Car
+                se obtendrán en la variable vals
+        """
+        # print('vals', vals)
+        # print('name', vals['name'])
+        vals['car_sequence'] = self.env['ir.sequence'].next_by_code('car.sequence')
+
+        # Parámetros de super --> Nombre de la clase y self
+        result = super(Car, self).create(vals)
+        return result
+
+    def unlink(self, vals):
+        """ 
+            Se utiliza para eliminar un registro
+            Sobrescritura del metodo unlink 
+        """
+    # 30. Boton en formulario
+    # Funcion del botón set_car_to_used
+    def set_car_to_used(self):
+       self.states = 'used' 
+    
+    # 30. Boton en formulario
+    # Funcion del botón set_car_to_used
+    def set_car_to_used(self):
+       self.states = 'sold' 
 
     def get_total_speed(self):
         """ 29. Campo calculado e impresiones en consola """

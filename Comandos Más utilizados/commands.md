@@ -22,6 +22,12 @@ source odoo-venv/bin/activate
 deactivate
 ```
 
+* Resolver problemas de permisos en ambiente virtual
+```
+sudo chown -R your_username:your_username path/to/virtuaelenv/
+```
+
+
 ### Eliminar Odoo por completo 
 
 * STOP SERVER
@@ -75,3 +81,23 @@ sudo rm -rf /etc/postgresql-common/
 
 sudo rm -rf /var/lib/postgresql/
 ```
+2970c72910bc42a99bca45c7e06157b38f2b4a45
+
+### Base de Datos - PostgreSQL 
+* Resolver error de autenticación --> Error: FATAL: Peer authentication failed for user "odoo 14"
+    1. Modificar el archivo de conf de postgresql 
+        ```
+        sudo nano /etc/postgresql/9.3/main/pg_hba.conf
+        ```
+    2. Agregar el comando para que todo el trafico del usuario odoo14 sea admitido
+        ```
+        local all user_name trust
+
+        local all odoo14 trust
+        ```
+    3. Reiniciar Servidor postgresql
+        ```
+        sudo service postgresql restart
+        ```
+
+

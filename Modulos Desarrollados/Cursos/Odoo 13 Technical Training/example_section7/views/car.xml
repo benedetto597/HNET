@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-
+    <!-- Los Widget son escritos en JS -->
     <!-- Form View Car -->
     <record id="car_form" model="ir.ui.view">
         <field name="name">car.form</field>
         <field name="model">car.car</field>
         <field name="arch" type="xml">
             <form>
-                <group>
-                    <group>
-                        <field name="name"/>
-                        <field name="horse_power"/>
-                        <field name="door_number"/>
+                <sheet>
+                    <header>
+                        <!-- Field Selection -->
+                        <field name="status" widget="statusbar"/>
 
-                        <!-- Field Many2one -->
-                        <field name="driver_id"/>
-                        <!-- Field Many2many -->
-                        <field name="feature_ids", widget="many2many_tags"/>
-                        <!-- Field compute -->
-                        <field name="total_speed"/>
-                        <field name="random_message"/>
+                        <!-- Set Car Used Button -->
+                        <!-- Set Invisible Where status != new -->
+                        <button name="set_car_to_used" string="Set Car Used" type="object" class="oe_highlight" attrs="{'invisible':[('status','!=','new')]}"/>
+                        <!-- Set Car Sold Button -->
+                        <!-- Set Invisible Where status != used -->
+                        <button name="set_car_to_sold" string="Set Car Sold" type="object" class="oe_highlight" attrs="{'invisible':[('status','!=','used')]}"/>
+
+                    </header>
+                    <group>
+                        <group>
+                            <field name="car_sequence" readonly="1"/>
+                            <field name="name" required="1"/>
+                            <field name="horse_power"/>
+                            <field name="door_number"/>
+
+                            <!-- Field Many2one -->
+                            <field name="driver_id" required="1"/>
+                            <!-- Field Many2many -->
+                            <field name="feature_ids" widget="many2many_tags"/>
+                            <!-- Field compute -->
+                            <field name="total_speed"/>
+                            <field name="random_message"/>
+                        </group>
                     </group>
-                </group>
+                <sheet>
             </form>
         </field>
     </record>
