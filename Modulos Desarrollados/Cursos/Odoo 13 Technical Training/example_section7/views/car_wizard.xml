@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Filter & Group -->
+    <record id="car_search_view" model="ir.ui.view">
+        <field name="name">Car Search</field>
+        <field name="model">car.car</field>
+        <field name="arch" type="xml">
+            <search>
+                <!-- domain Contiene la sentencia del filtro -->
+                <filter string="My First Filter" name="filter_1" domain="[('door_number','=',2)]"/>
+                <!-- '&gt;' es equivalente a ">" -->
+                <filter string="My Second Filter" name="filter_2" domain="[('door_number','&gt;',2)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Wizard Action -->
+    <record id="car_wizard_action" model="ir.actions.act_window">
+        <field name="name">Add Horse Power For Actual Car</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">car.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Wizard Form -->
+    <record id="car_change_horse_power_wizard_form" model="ir.ui.view">
+        <field name="name">car.wizard.form</field>
+        <field name="model">car.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="horse_power_plus"/>
+                </group>
+                <footer>
+                    <!-- El nombre de la función del wizard es add_horse_power -->
+                    <button string="Confirm" name="add_horse_power" type="objetct" class="btn-primary"/>
+                    <button string="Cancel"  class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+
+    </record>
+
+    <!-- Act Window of Wizard -->
+    <act_window id="wizard_action_wizard_car"
+        name = "Car Wizard"
+        binding_model = "car.car"
+        res_model = "car.wizard"
+        view_mode = "form"
+        target = "new"
+    />
+</odoo>

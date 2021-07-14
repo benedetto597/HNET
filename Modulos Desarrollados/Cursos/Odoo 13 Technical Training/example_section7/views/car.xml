@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- Filter & Group -->
+    <record id="car_search_view" model="ir.ui.view">
+        <field name="name">Car Search</field>
+        <field name="model">car.car</field>
+        <field name="arch" type="xml">
+            <search string="Car Search">
+                <!-- Group -->
+                <group expand="1" string="Group by ..">
+                    <!-- Filter by name -->
+                    <filter string="Name" name="filter_name" domain="[]" context="{'group_by':'name'}"/>
+                </group>
+
+                <!-- Filter -->
+                <!-- domain Contiene la sentencia del filtro -->
+                <filter string="My First Filter" name="filter_1" domain="[('door_number','=',2)]"/>
+                <!-- '&gt;' es equivalente a ">" -->
+                <filter string="My Second Filter" name="filter_2" domain="[('door_number','&gt;',2)]"/>
+            </search>
+        </field>
+    </record>
+
     <!-- Los Widget son escritos en JS -->
     <!-- Form View Car -->
     <record id="car_form" model="ir.ui.view">
@@ -11,6 +32,10 @@
                     <header>
                         <!-- Field Selection -->
                         <field name="status" widget="statusbar"/>
+                        
+                        <!-- Wizard Action -->
+                        <!-- name: module_name.action_id -->
+                        <button name="%(car_example.car_wizard_action)d" type="action" string="Update Horse Power"/>
 
                         <!-- Set Car Used Button -->
                         <!-- Set Invisible Where status != new -->
@@ -61,6 +86,10 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">car.car</field>
         <field name="view_mode">tree,form</field>
+        <!-- Filtro por default -->
+        <!-- key = 'search_default_' luego el nombre del filtro  -->
+        <!-- value = 1 significa acitvo, 0 desactivado -->
+        <field name="context">{"search_default_filter_1":1,'search_default_filter_3':1}</field>
     </record>
 
     <!-- Menu For Car -->

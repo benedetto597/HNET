@@ -3,12 +3,10 @@
 """ 
 ----------------------------------------------------------------------------------------------------
     @author edgar.benedetto@unah.hn 
-    @date 12/07/2021
+    @date 14/07/2021
     @version 1.0
 ----------------------------------------------------------------------------------------------------
 """
 
-from . import views
-from . import models
-from . import controllers
-from . import wizar
+from . import car_wizard
+

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Car_Example",
+    'name': "car_example",
 
     'summary': """
         Short (1 phrase/line) summary of the module's purpose, used as
@@ -28,6 +28,7 @@
         'views/car.xml',
         'views/parking.xml',
         'views/sequences.xml',
+        'wizard/car_wizard.xml',
 
     ],
     # only loaded in demonstration mode

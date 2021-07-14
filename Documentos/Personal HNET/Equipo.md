@@ -41,14 +41,23 @@ ___
 
 ### Consultor Basis
 * Funciones: 
-    * Levantamiento de instancias, copias de BD, generación de backups, reinicio de instancias, instalación de addons, mantenimiento de infraestructura, entre otros. 
+    * Levantamiento de instancias 
+    * Copias de BD 
+    * Generación de backups 
+    * Reinicio de instancias 
+    * Instalación de addons 
+    * Mantenimiento de infraestructura 
+    * Entre otros. 
 
 ### Consultor: 
 * Arnold Sevilla
 ___
 ### Consultores Desarrolladores
 * Funciones: 
-    * Desarrollo de ampliaciones en procesos Odoo, desarrollo de ampliaciones en funcionalidades Odoo, desarrollo de nuevas funcionalidades o modelos Odoo, entre otros.
+    * Desarrollo de ampliaciones en procesos Odoo 
+    * Desarrollo de ampliaciones en funcionalidades Odoo 
+    * Desarrollo de nuevas funcionalidades o modelos Odoo 
+    * Entre otros.
 
 ### Consultores: 
 * José Alfredo Reyes
@@ -57,11 +66,17 @@ ___
 ___
 ### Telecomunicaciones
 * Funciones: 
-    * Soporte técnico de internet, instalación de antenas, visitas de soporte residencial o corporativo, aumento de ancho de banda, entre otros.
+    * Soporte técnico de internet 
+    * Instalación de antenas 
+    * Lisitas de soporte residencial o corporativo 
+    * Numento de ancho de banda 
+    * Entre otros.
 
 ### Gestor: 
 * Sahid Lino 
-
-Nómina
-Funciones: Pago de planillas HNET
-Gestor: Cynthia (esposa de Gerardo Banegas)
+__
+### Nómina
+* Funciones: 
+    * Pago de planillas HNET
+### Gestor: 
+* Cynthia (esposa de Gerardo Banegas)
