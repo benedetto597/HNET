@@ -27,6 +27,10 @@ deactivate
 sudo chown -R your_username:your_username path/to/virtuaelenv/
 ```
 
+* Instalar las dependencias del archivo de dependencias de odoo
+```
+pip3 install -r odoo/requirements.txt
+```
 
 ### Eliminar Odoo por completo 
 
@@ -51,6 +55,8 @@ sudo rm -f /etc/odoo.conf
 sudo rm -f /etc/odoo/odoo.conf
 
 sudo rm -f /etc/odoo-server.conf 
+
+sudo rm -f /etc/systemd/system/odoo13.service
 
 sudo update-rc.d -f odoo remove
 
@@ -81,7 +87,6 @@ sudo rm -rf /etc/postgresql-common/
 
 sudo rm -rf /var/lib/postgresql/
 ```
-2970c72910bc42a99bca45c7e06157b38f2b4a45
 
 ### Base de Datos - PostgreSQL 
 * Resolver error de autenticación --> Error: FATAL: Peer authentication failed for user "odoo 14"
