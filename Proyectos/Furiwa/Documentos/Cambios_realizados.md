@@ -202,3 +202,70 @@ odoo.define('hnet_kitchen_control.menu_hide_buttons',function(require) {
     });
 });
 ```
+8. Los pedidos de eCommerce cambiar el nombre de “Pedidos” a “Pedidos Sitio Web” 
+* Solución Desarrollada en la ruta ``` odoo-custom-addons>hnet_kitchen_control>static>src>xml>kitchen_pos_templates.xml```
+
+```html
+<tr>
+    <td>
+        <div class="control-button ver-pedidos" style="width: 80%; height: 100%; margin-top: 15px;">
+            <span>
+                <i class="fa fa-shopping-cart" aria-hidden="true"/>
+                Pedidos Sitio Web
+            </span>
+        </div>
+    </td>
+</tr>
+```
+
+9. El botón de "Aplicar Propina" debe cambiar su nombre a "Eliminar Propina" cuando se haya aplicado la propina, en ambas formas se debe mostrar la previsualización de la factura 
+* Solución Desarrollada en la ruta ``` odoo-custom-addons>hnet_kitchen_control>static>src>js>tip.js```
+
+```js
+printBill.BillScreenWidget.include({
+    get_receipt_render_env: function(){
+
+        var render_env = this._super();
+        render_env.receipt.bill = true;
+        var order = this.pos.get_order();
+
+        //obtenemos lineas de orden
+        var lines = order.get_orderlines();
+
+        //Preparamos la propina
+        var tip = this.pos.db.get_product_by_barcode("propina");
+        var tip_line = false;
+
+        //Ver si ya existe la linea de con la propina
+        for (var line in lines){
+            if(lines[line].product.id === tip.id){
+                tip_line = lines[line];
+
+            }
+        }
+
+        if($("#add-tip").html() == 'Aplicar Propina'){
+            if(tip_line){
+                console.log()
+                order.remove_orderline(tip_line);
+            }
+
+            var subtotal = order.get_total_without_tax();
+
+            order.add_product(tip, {
+                price: Number.parseFloat(subtotal * 0.10).toFixed(2),
+                quantity: 1,
+                merge: false,
+            });
+
+            $("#add-tip").html('Eliminar Propina');
+
+        }else{
+            order.remove_orderline(tip_line);
+            $("#add-tip").html('Aplicar Propina');
+        }
+        return render_env;
+
+        },
+     });
+```
