@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+     <t t-name="Button_2x1">
+        <span class="control-button add-2x1" >
+            <i class="fa fa-gift"></i>
+            2x1
+        </span>
+    </t>
+</templates>
