@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Botón de Datos de exonerado -->
+<templates id="template" xml:space="preserve">
+    <t t-name="SarData" owl="1">
+       <span class="control-button" t-att-class="is_available()?  'highlight' : ''">
+           <i class="fa fa-info"></i>
+           <span> </span>
+           <span>Datos SAR</span>
+       </span>
+   </t>
+</templates>

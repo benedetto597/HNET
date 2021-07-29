@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    @author ebenedetto@hnetw.com - HNET
+    @date 28/07/2021
+    @decription Factura personalizada - Incluye información solicitada por el SAR
+    @name_file pos.xml
+    @version 0.9
+-->
+
+<templates id="point_of_sale.template" xml:space="preserve">
+    <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('pos-receipt-contact')]" position="replace">
+            <div class="pos-receipt-contact">
+
+                <!-- Información de la compañia -->
+                <div class="pos-receipt-center-align">
+                         <div class="emph"><t t-esc="env.pos.config.nombre || ''"/><br /></div>
+                            <t t-esc="env.pos.config.razon || ''"/><br />
+                            <t t-esc="env.pos.config.direccion || ''"/><br />
+                            RTN:<t t-esc="env.pos.config.rtn || ''"/> <br />
+                            Tel..:<t t-esc="env.pos.config.telefono || ''"/><br />
+                            Email:<t t-esc="env.pos.config.correo || ''"/><br />
+                            <br />
+                            <t t-esc="env.pos.push_order(env.pos.get_order())"/>
+                            <div class="emph">FACTURA N° <t t-esc="env.pos.get_order().facturacion"/><br />   </div>
+                            FECHA:<t t-esc="receipt.date.localestring"/><br />
+                            CAI:<br /> <t t-esc="env.pos.config.cai"/><br />
+
+                            FECHA LÍMITE DE EMISIÓN:<br />
+                            <t t-set="limite_emision" t-value="env.pos.config.fecha_expiracion.split('-')"/>
+                            <t t-esc="limite_emision[2]"/>/<t t-esc="limite_emision[1]"/>/<t t-esc="limite_emision[0]"/>
+                            <br />
+                            <br />
+                    </div>
+
+                    <!-- Encabezado de la factura -->
+                    <t t-if='receipt.header_html'>
+                        <t t-raw='receipt.header_html' />
+                    </t>
+                    <t t-if='!receipt.header_html and receipt.header'>
+                        <div><t t-esc='receipt.header' /></div>
+                    </t>
+            </div>
+
+            <!-- Información del cliente -->
+            <div style="font-size: 75%;">
+
+                <t t-if="receipt.client">
+                    Cliente :<t t-esc="receipt.client.name" />
+                    <br/>
+                    RTN :<t t-esc="receipt.client.vat" />
+                </t>
+                <t t-if="!receipt.client">
+                    Cliente : Consumidor Final
+                    <br/>
+                    RTN : N/A
+                </t>
+                <br />
+                N° O/C Exenta:<t t-if="env.pos.get_order().note1"> <t t-esc="env.pos.get_order().note1"/> </t>
+                <br/>
+                N° Reg. Exonerado: <t t-if="env.pos.get_order().note2"> <t t-esc="env.pos.get_order().note2"/> </t>
+                <br/>
+                N° Reg. de la SAG:<t t-if="env.pos.get_order().note3"> <t t-esc="env.pos.get_order().note3"/> </t>
+                <br/>
+            </div>
+        </xpath>
+
+        <!-- Información de la de los productos de la orden de venta -->
+        <xpath expr="//div[hasclass('orderlines')]" position="replace">
+            <div class="orderlines">
+                <div style="font-size: 95%;">
+                    <table class='receipt-orderlines'>
+                        <colgroup>
+                            <col width='15%' />
+                            <col width='50%' />
+                            <col width='25%' />
+                        </colgroup>
+                        <tr style="border-bottom: 1px dashed black;">
+                            <th style='text-align:left'>CANT.</th>
+                            <th style='text-align:center'>DESCRIPCIÓN</th>
+                            <th style='text-align:right'>TOTAL</th>
+                        </tr>
+                        <tr t-foreach="orderlines" t-as="orderline" t-key="orderline.id">
+                             <td class="pos-receipt-left-align">
+                                <t t-esc="orderline.get_quantity_str()"/>
+                            </td>
+
+                             <td>
+                                <t t-esc="orderline.get_product().display_name"/>
+                                <t t-esc="env.pos.format_currency(orderline.get_unit_display_price())"/><br />
+
+                                 <t t-if="orderline.get_discount() > 0">
+                                    <div class="pos-disc-font">
+                                         <t t-esc="orderline.get_discount()"/>% Desc.
+                                    </div>
+
+                                </t>
+                            </td>
+
+                            <td style='text-align:right'>
+                                <t t-esc="env.pos.format_currency(orderline.get_price_without_tax())"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <br />
+            <div>================================</div>
+        </xpath>
+
+        <!-- Desgloce de impuestos, subtotal y total de la factura -->
+        <xpath expr="//t[@t-if='!isTaxIncluded']" position="replace">
+            <div style="font-size: 85%;">
+                <div class='receipt-orderlines'>
+                    <colgroup>
+                        <col width='40%' />
+                        <col width='30%' />
+                        <col style='text-align:right' width='35%' />
+                    </colgroup>
+
+
+	            	<tr>
+	                    <td>Desc. y Rebajas:</td>
+                        <td/>
+	                    <td  style='text-align:right'>
+	                        <t t-esc="env.pos.format_currency(env.pos.get_order().get_total_discount() || '0.00' )"/>
+	                    </td>
+	                </tr>
+
+	                <tr>
+	                    <td>Subtotal:</td>
+                        <td/>
+	                    <td  style='text-align:right'>
+	                        <t t-esc="env.pos.format_currency(env.pos.get_order().get_total_without_tax())"/>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>Importe Exonerado:</td>
+                        <td/>
+	                    <td  style='text-align:right'>
+                            L 0.00
+	                    </td>
+	                </tr>
+                    <tr>
+	                    <td>Importe Exento:</td>
+                        <td/>
+	                    <td  style='text-align:right'>
+	                    	 L 0.00
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>Importe 15%:</td>
+                        <td/>
+	                    <td  style='text-align:right'>
+                            <t t-esc="env.pos.format_currency(env.pos.get_order().get_tax_15()) || '0.00' "/>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>Importe 18%:</td>
+                        <td/>
+	                    <td  style='text-align:right'>
+                            <t t-esc="env.pos.format_currency(env.pos.get_order().get_tax_18())"/>
+	                    </td>
+	                </tr>
+
+	                <tr>
+	                    <td>15% ISV:</td>
+                        <td/>
+	                    <td  style='text-align:right'>
+	                        <t t-esc="env.pos.format_currency(env.pos.get_order().get_tax_details_all().tax15)" />
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>18% ISV:</td>
+                        <td/>
+	                    <td  style='text-align:right'>
+	                        <t t-esc="env.pos.format_currency(env.pos.get_order().get_tax_details_all().tax18)" />
+	                    </td>
+	                </tr>
+
+                    <tr style="font-weight: bold;" id="total" class="emph">
+	                    <td >Total:</td>
+                        <td/>
+	                    <td  style='text-align:right'>
+	                        <t t-esc="env.pos.format_currency(env.pos.get_order().get_total_with_tax())"/>
+	                    </td>
+	                </tr>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('pos-receipt-amount')]" position="replace">
+            <div class='pos-receipt-amount'>
+
+            </div>
+        </xpath>
+
+        <!-- Desgloce del tipo de pago, cambio y tota en texto -->
+        <xpath expr="//t[@t-key='line.cid']" position="replace">
+                <div style="font-size: 85%;">
+                    <table>
+                        <colgroup>
+                            <col width='10%' />
+                            <col width='55%' />
+                            <col style='text-align:right' width='35%' />
+                        </colgroup>
+                        <tr class="emph" t-foreach="paymentlines" t-as="line">
+                            <td>
+                                <t t-esc="line.name"/>:
+                            </td>
+                            <td/>
+                            <td class="pos-receipt-right-align">
+                                <t t-esc="env.pos.format_currency(line.get_amount())"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table>
+                        <colgroup>
+                            <col width='15%' />
+                            <col width='60%' />
+                            <col width='25%' class="pos-receipt-right-align" />
+                        </colgroup>
+
+                        <tr><td>Change: </td> <td class="pos-receipt-right-align">
+                            <t t-esc="env.pos.format_currency(receipt.change)"/>
+                        </td></tr>
+                    </table>
+                    <br />
+                </div>
+                <div style="font-size: 85%;" id="montotext">
+                    SON: <t t-esc="env.pos.get_order().amount_text()"/>
+                </div>
+                <div>================================</div>
+        </xpath>
+
+        <!-- Información del personal y facturación -->
+        <xpath expr="//div[hasclass('before-footer')]" position="replace">
+            <div class="before-footer" >
+                <div class="pos-receipt-order-data">
+                    <t t-set="receipt.name" t-value="'FACTURA N° ' + env.pos.get_order().facturacion"/>
+                    Le atendió: <t t-esc="receipt.cashier ? receipt.cashier : env.pos.user.name"/>
+                    <br/>
+                    <br/>
+                    RANGO AUTORIZADO:<br /> <t t-esc="env.pos.config.rango"/>
+                    <br/>
+                </div>
+                <br/>
+
+            </div>
+        </xpath>
+
+        <!-- Eliminado de elementos innecesarios -->
+        <xpath expr="//div[hasclass('receipt-change')]" position="replace">
+            <div class="pos-receipt-amount receipt-change">
+            </div>
+        </xpath>
+        <xpath expr="//t[@t-if='isTaxIncluded']" position="replace">
+            <div></div>
+        </xpath>
+        <xpath expr="//t[@t-if='receipt.total_discount']" position="replace">
+            <div></div>
+        </xpath>
+
+    </t>
+</templates>
