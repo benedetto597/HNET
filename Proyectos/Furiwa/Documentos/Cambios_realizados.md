@@ -12,6 +12,10 @@ ___
 
 ### Recomendaciones
 
+0.  | Usuario | Contraseña | 
+    |:-------:|:----------:|
+    |admin    | HNET2020** |
+
 1. Devolverle al usuario admin el pin: 44003211997
 2. El rango de facturación estaba con la fecha 28/02/2021
 3. Agregar a las dependencias ```netifaces==0.11.0```
