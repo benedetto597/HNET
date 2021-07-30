@@ -3,7 +3,7 @@ odoo.define('pos_ticket_custom.pos', function (require) {
     var core = require('web.core');
     var models = require('point_of_sale.models');
     // var Model = require('web.DataModel');
-	var PosPopWidget = require('point_of_sale.popups');
+	var add_discount_exadd_discount_ex = require('point_of_sale.popups');
 	var screens = require('point_of_sale.screens');
 	var gui = require('point_of_sale.gui');
     var _t = core._t; 
@@ -116,7 +116,7 @@ models.load_models({
 
 
 
-    var PosCustNotePopupWidget = PosPopWidget.extend({
+    var PosCustNotePopupWidget = add_discount_exadd_discount_ex.extend({
     template: 'PosCustNotePopupWidget',
         renderElement: function(){
             this._super(); 
@@ -168,7 +168,7 @@ models.load_models({
     */
 
     /////////////////////////////////////////////////////////////////////////////
-    PosPopWidget.include({
+    add_discount_exadd_discount_ex.include({
         renderElement: function(){
             var self = this;
             this._super();
