@@ -85,44 +85,60 @@ pos_model_order.Order = pos_model_order.Order.extend({
         }
 
 
-        converted += 'LEMPIRAS CON '  + this.convertNumber(number_dec) +  ' CENTAVOS';
-        
+        if(number_dec == '00'){
+            converted += 'LEMPIRAS CON CERO CENTAVOS';
+        }else{
+            converted += 'LEMPIRAS CON '  + this.convertNumber(number_dec) +  ' CENTAVOS';
+        }
+
         return converted ; 
         },
         
     convertNumber: function (n){
         var UNIDADES = ['','UNO ','DOS ','TRES ','CUATRO ','CINCO ','SEIS ','SIETE ','OCHO ','NUEVE ','DIEZ ', 'ONCE ','DOCE ','TRECE ','CATORCE ','QUINCE ','DIECISEIS ','DIECISIETE ','DIECIOCHO ','DIECINUEVE ','VEINTE '];
-        var DECENAS = ['VENTI','TREINTA ','CUARENTA ','CINCUENTA ','SESENTA ','SETENTA ','OCHENTA ','NOVENTA ','CIEN '];
+        var DECENAS = ['VEINTI','TREINTA ','CUARENTA ','CINCUENTA ','SESENTA ','SETENTA ','OCHENTA ','NOVENTA '];
         var CENTENAS = ['CIENTO ','DOSCIENTOS ','TRESCIENTOS ','CUATROCIENTOS ', 'QUINIENTOS ','SEISCIENTOS ','SETECIENTOS ','OCHOCIENTOS ','NOVECIENTOS '];
         var output = '';
+
         if(n == '100'){
             output = "CIEN ";
-        }
-        else if (n[0] != '0') {
-            if(n.toString().length > 2){
-                output = CENTENAS[parseInt(n[0])-1];
-            }else{
-                output = DECENAS[parseInt(n[0])-2];
-            }
         }else{
-            output = 'CERO';
+            if (n[0] != '0') {
+                if(n.toString().length > 2){
+                    output = CENTENAS[parseInt(n[0])-1];
+                }else{
+                    if (n > 20){
+                        output = DECENAS[parseInt(n[0])-2];
+                    }else{
+                        output = UNIDADES[parseInt(n)];
+                    }
+                }
+            }
         }
         var k = parseInt(n.substring(1));
+        if (k.toString().length > 1){
+            if (k <= 20) {
+                output +=  UNIDADES[k];
 
-        if (k <= 20) {
-            output += UNIDADES[k];
-        }else {
-            if((k > 30) & (n[2] != '0')){
-                //output += '%sY %s' % (DECENAS[parseInt(n[1])-2], UNIDADES[parseInt(n[2])]);
-                output += DECENAS[parseInt(n[1])-2] + 'Y ' + UNIDADES[parseInt(n[2])];
+            }else {
+                if((k > 30) & (n[2] != '0')){
+                    //output += '%sY %s' % (DECENAS[parseInt(n[1])-2], UNIDADES[parseInt(n[2])]);
+                    output += DECENAS[parseInt(n[1])-2] + 'Y ' + UNIDADES[parseInt(n[2])];
+                }
+                else {
+                    //output += '%s%s' % (DECENAS[parseInt(n[1])-2], UNIDADES[parseInt(n[2])]);
+                    output += DECENAS[parseInt(n[1])-2]  + UNIDADES[parseInt(n[2])];
+                }
             }
-            else {
-                //output += '%s%s' % (DECENAS[parseInt(n[1])-2], UNIDADES[parseInt(n[2])]);
-                output += DECENAS[parseInt(n[1])-2] + UNIDADES[parseInt(n[2])];
+        }else{
+            if(((Array.from(output)).join('')).toString() == 'VEINTI'){
+                output +=  UNIDADES[k];
+            }else if(DECENAS.includes(output)){
+                output += ' Y '+ UNIDADES[k];
             }
         }
         return output;
-    },   
+    },
 });
 
 });

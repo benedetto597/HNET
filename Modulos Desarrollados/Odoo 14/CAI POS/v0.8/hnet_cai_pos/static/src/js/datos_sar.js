@@ -59,7 +59,11 @@
            if (confirmed) {
                order.note2 = Exonerado;
                this.get_sag_ex(order);
+           }else{
+               order.note1 = '';
+               order.note2 = '';
            }
+
         }
         async get_sag_ex(order) {
            const { confirmed, payload: SAG } = await this.showPopup('TextInputPopup', {
@@ -70,6 +74,10 @@
 
            if (confirmed) {
                order.note3 = SAG;
+           }else{
+               order.note1 = '';
+               order.note2 = '';
+               order.note3 = '';
            }
         }
     }

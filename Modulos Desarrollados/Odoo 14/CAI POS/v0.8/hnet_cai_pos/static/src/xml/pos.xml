@@ -139,14 +139,14 @@
 	                    <td>Importe Exonerado:</td>
                         <td/>
 	                    <td  style='text-align:right'>
-                            <t t-esc="env.pos.format_currency(env.pos.get_order().get_tax_simple() || '0.00')"/>
+                            L 0.00
 	                    </td>
 	                </tr>
                     <tr>
 	                    <td>Importe Exento:</td>
                         <td/>
 	                    <td  style='text-align:right'>
-	                    	 L <t t-esc="env.pos.get_order().add_discount_ex() || '0.00' "/>
+	                    	 L 0.00
 	                    </td>
 	                </tr>
 	                <tr>
@@ -256,6 +256,9 @@
             </div>
         </xpath>
         <xpath expr="//t[@t-if='isTaxIncluded']" position="replace">
+            <div></div>
+        </xpath>
+        <xpath expr="//t[@t-if='receipt.total_discount']" position="replace">
             <div></div>
         </xpath>
 
