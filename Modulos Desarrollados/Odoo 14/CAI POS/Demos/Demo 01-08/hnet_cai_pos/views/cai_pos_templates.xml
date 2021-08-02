@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <template id="cai_pos_template" inherit_id="point_of_sale.assets">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="hnet_cai_pos/static/src/js/pos_js.js"/>
+                <script type="text/javascript" src="hnet_cai_pos/static/src/js/amount2text.js"/>
+                <script type="text/javascript" src="hnet_cai_pos/static/src/js/pos.js"/>
+                <script type="text/javascript" src="hnet_cai_pos/static/src/js/datos_sar.js"/>
+            </xpath>
+        </template>
+
+        <record id="seq_type_pos_order_custom" model="ir.sequence">
+            <field name="name">POS Order Custom</field>
+            <field name="code">pos.order.custom</field>
+        </record>
+    </data>
+</odoo>
