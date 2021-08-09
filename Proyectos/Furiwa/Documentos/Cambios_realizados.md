@@ -273,3 +273,120 @@ printBill.BillScreenWidget.include({
         },
      });
 ```
+
+10. Bloquear el botón de notas para cualquier producto que ya haya sido ingresado a la cocina. Esta es una validación igual a las del punto #11, únicamente que con el botón de Notas. Ningún producto deberá poder borrarse o permitir cambiar cantidades después de haber sido enviado a la cocina. Solamente el usuario administrador tendrá esta función. Antes de ser ingresado a la cocina, los productos si deberán poder borrarse sin ningún problema. (Probar diferentes escenarios para validar este punto)
+
+* 1er Parte de la Solución Desarrollada en la ruta ``` odoo-custom-addons>hnet_kitchen_control>static>src>js>kitchen__control_pos.js```
+
+```js
+// Agregar la clase 'note' al botón 'Notas'
+var elem_note = $('[class="control-button"]');
+var note_button = elem_note[0];
+var html_note = $(note_button).html();
+var content_note = (html_note.toString()).split('>');
+var is_note = content_note[2].split('')
+
+if((is_note.slice(1,5)).join('') == 'Nota'){
+    $(note_button).addClass('note');
+}
+```
+
+* 2da parte de la Solución Desarrollada en la ruta ``` odoo-custom-addons>hnet_kitchen_control>static>src>js>kitchen__control_pos.js```
+
+```js
+// Al hacer click en "Pedir" Agregar el id "note_tokitchen" al boton "Notas"
+var note_button = $('[class="control-button note"]');
+$(note_button).attr('id', 'note_tokitchen');
+```
+
+```js
+// ------------------------------------------------------------------------------------------------------------------ //
+// Bloquear botón de Notas y cantidades cuando el pedido se mande a cocina
+screens.OrderWidget.include({
+    // Sobre escribir el renderizado de las orderlines
+    render_orderline: function(orderline){
+
+        var el_str  = QWeb.render('Orderline',{widget:this, line:orderline});
+        var el_node = document.createElement('div');
+            el_node.innerHTML = _.str.trim(el_str);
+            el_node = el_node.childNodes[0];
+            el_node.orderline = orderline;
+            el_node.addEventListener('click',this.line_click_handler);
+        var el_lot_icon = el_node.querySelector('.line-lot-icon');
+        if(el_lot_icon){
+            el_lot_icon.addEventListener('click', (function() {
+                this.show_product_lot(orderline);
+            }.bind(this)));
+        }
+
+        orderline.node = el_node;
+
+        // Obtener el cajero y el botón notas en sus distintos estados
+        var cashier = this.pos.get('cashier') || this.pos.get_cashier();
+        var elem_note = $('[class="control-button note"]');
+        var block_note = $('[class="control-button note disabled"]');
+
+        if(orderline.length != 0){
+            
+            // Obtener la categoria de a la que pertenecen el producto de la orderline
+            var categ_id = orderline.product.categ_id[1];
+            var food_cat = categ_id.split('/');
+
+            // Obtener los botones cantidad, eliminar y en distintos estados
+            var qty_button = $('.mode-button[data-mode="quantity"]');
+            var delete_button = $('[class="input-button numpad-backspace"]')
+            var selected_button = $('[class="selected-mode mode-button"]');
+
+            // Obtener el html del botón cantidad y el seleccionado para compararlos
+            var qty_html = $(qty_button).html();
+            var selected_html = $(selected_button).html();
+
+            if(food_cat[0] == 'Furiwa ' || food_cat[0] == 'Tokyo '){
+
+                // Obtener los botones sentinela en estado necesario para bloquear los botones
+                var to_kitchen = $('[class="control-button order-submit highlight"]');
+                var note_state = $('#note_tokitchen');
+
+                if(to_kitchen.length == 0 || note_state.length != 0){
+                    if(cashier.role == "cashier"){
+                        
+                        // Bloqueo de botones si es cajero o mesero
+                        if(qty_html == selected_html){
+                            $(qty_button).removeClass('selected-mode mode-button');
+                            $(qty_button).addClass('mode-button disabled-mode');
+                        }
+                        $(elem_note).addClass('disabled');
+                        $(elem_note).css("pointer-events","none");
+                        $(qty_button).prop('disabled', true);
+                        $(delete_button).css("pointer-events","none");;
+                    }else{
+                        $(block_note).removeClass('disabled');
+                        $(block_note).css("pointer-events","auto");
+                        $(qty_button).removeProp('disabled');
+                        $(delete_button).css("pointer-events","auto");
+                    }
+                    $(note_state).removeAttr('id');
+                }else{
+                    // Desbloqueo de botones si es administrador
+                    $(qty_button).removeClass('mode-button disabled-mode');
+                    $(qty_button).addClass('selected-mode mode-button');
+                    $(block_note).removeClass('disabled');
+                    $(block_note).css("pointer-events","auto");
+                    $(qty_button).removeProp('disabled');
+                    $(delete_button).css("pointer-events","auto");
+                }
+            }else{
+                // Desbloqueo de botones si la categoria no corresponde a las que necesitan comanda
+                $(qty_button).removeClass('mode-button disabled-mode');
+                $(qty_button).addClass('selected-mode mode-button');
+                $(block_note).removeClass('disabled');
+                $(block_note).css("pointer-events","auto");
+                $(qty_button).removeProp('disabled');
+                $(delete_button).css("pointer-events","auto");
+            }
+        }
+        return el_node;
+    },
+});
+// ------------------------------------------------------------------------------------------------------------------ //
+```

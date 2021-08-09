@@ -105,8 +105,74 @@ sudo rm -rf /var/lib/postgresql/
         sudo service postgresql restart
         ```
 
-### Odoo v14
+______
+______
+### Odoo 13
+#### Backend - Python
+_____
+#### Frontend - JavaScript - XML
 
+* Botón personalizado Odoo v13
+
+```js
+odoo.define('custom-button.custom_button', function (require) {
+"use strict";
+    var core = require('web.core');
+    var screens = require('point_of_sale.screens');
+    var gui = require('point_of_sale.gui');
+
+    //Custom Code
+    var CustomButton = screens.ActionButtonWidget.extend({
+        template: 'CustomButton',
+
+        button_click: function(){
+
+        var self = this;
+        self.custom_function();
+        
+        },
+
+        custom_function: function(){
+            console.log('Hi I am button click of CustomButton');
+        }
+
+    });
+
+    screens.define_action_button({
+        'name': 'custom_button',
+        'widget': CustomButton,
+    });
+});
+```
+
+```html
+<!-- static > src > xml -->
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="CustomButton">
+        <span class="control-button">
+            <i class="fa fa-print"></i>
+            Custom Button
+        </span>
+    </t>
+
+</templates>
+```
+
+```html
+<!-- views -->
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets" inherit_id="point_of_sale.assets">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/custom-button/static/src/js/custom.js"></script>
+        </xpath>
+    </template>
+</odoo>
+```
+_______
+_______
+### Odoo v14
 #### Backend - Python
 * Crear y actualizar ordenes de venta desde el fronted con py
 
@@ -135,8 +201,8 @@ sudo rm -rf /var/lib/postgresql/
 
         return self.env['pos.order'].search_read(domain = [('id', 'in', order_ids)], fields = ['id', 'pos_reference'])
 ```
-
-#### Frontend - JavaScript
+______
+#### Frontend - JavaScript - XML 
 * Imprimir en consola el recibo o factura acutal
 
 ```js   
