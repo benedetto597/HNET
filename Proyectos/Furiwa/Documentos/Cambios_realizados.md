@@ -390,3 +390,115 @@ screens.OrderWidget.include({
 });
 // ------------------------------------------------------------------------------------------------------------------ //
 ```
+
+
+11. Al momento de ingresar pedidos de delivery o pickup desde el Punto de Venta, el nombre del cliente dentro del pedido debe ser obligatorio. (puede crearse una dependencia entre el equipo de venta “delivery”, “pickup” y el campo del “cliente”). Luego de seleccionar el cliente de delivery consultar la referencia de orden. Si se quiere con cliente no se debe bloquear el botón de cliente
+
+* 1er parte de la Solución Desarrollada en la ruta ``` odoo-custom-addons>hnet_kitchen_control>static>src>js>menu_hide_buttons.js```
+
+```js
+// Cargar popup de equipo de trabajo
+if(current_table == 'Delivery' || current_table == 'delivery' || current_table == 'Deliveries' || current_table == 'deliveries'){
+    if(this.pos.get_order()){
+        var screen = this.pos.get_order().get_screen_data('screen');
+        if(screen == 'products'){
+            if(this.pos.get_order().delivery_filter){
+                this.gui.show_screen('products');
+            }else{
+                this.gui.show_popup('PopupDeliveriesWidget');
+            }
+        }
+    }
+}
+```
+
+* 2da parte de la Solución Desarrollada en la ruta ``` odoo-custom-addons>hnet_kitchen_control>static>src>js>btn_pedidos_cocina.js```
+    
+```js
+//Popup de deliveries
+     var PopupDeliveriesWidget = PopupWidget.extend({
+        template:'PopupDeliveriesWidget',
+
+        init: function(parent, options){
+            this._super(parent, options);
+        },
+        show: function(options){
+            this._super(options);
+            this.list();
+        },
+        list: function(){
+            var self = this;
+            var contents = this.$el[0].querySelector('#tabla-deliveries');
+
+            var equipo_ventas = this.pos.equipo_ventas ? this.pos.equipo_ventas : []
+              if (contents){
+                contents.innerHTML = "";
+
+                for(var i = 0, len = Math.min(equipo_ventas.length,1000); i < len; i++) {
+                   if (equipo_ventas[i]) {
+                    var team_name= equipo_ventas[i];
+                    var clientline_html = QWeb.render('PopupDeliveriesLinesWidget', {widget: this, team_name: team_name});
+                    var orderline = document.createElement('tbody');
+                    orderline.innerHTML = clientline_html;
+                    orderline = orderline.childNodes[1];
+                    contents.appendChild(orderline);
+                   }
+                }
+            }
+
+        },
+        events: {
+            'click .button.cancel':  'click_cancel',
+            'click .button.confirm':  'click_confirm',
+            'click .control-button.delivery': 'deliveries',
+        },
+        click_cancel: function(){
+            if(this.pos.get_order()){
+                var screen = this.pos.get_order().get_screen_data('screen');
+                if(screen == 'products'){
+                    $('.floor-button').click();
+                }
+            }
+        },
+        click_confirm: function(){
+            this.gui.show_screen('clientlist');
+        },
+        deliveries: function(e){
+            var filter = e.target.id;
+
+            var team_sales = this.pos.equipo_ventas ? this.pos.equipo_ventas : []
+            var customers = this.pos.db.get_partners_sorted(1000);
+            var curr_client = this.pos.get_order().get_client();
+            var verify_client = false;
+
+            for (var i = 0; i < customers.length ; i++){
+                var client_name = customers[i].name;
+                for (var j = 0; j < team_sales.length; j++){
+                    if(team_sales[j].id == filter){
+                        var team_name = team_sales[j].name;
+                        console.log(team_name);
+                        console.log(client_name);
+                        if(client_name == team_name){
+                            verify_client = true;
+                            this.pos.get_order().set_client(this.pos.db.get_partner_by_id(customers[i].id));
+                        }
+                    }
+                }
+            }
+
+            if(curr_client){
+                verify_client = true;
+            }
+
+            if(verify_client == false && !curr_client){
+                alert(_t("Debe establecer un cliente primero"));
+                this.gui.show_screen('clientlist');
+            }else{
+                this.pos.get_order().delivery_filter = filter;
+                this.gui.show_screen('products');
+            }
+        }
+     });
+    gui.define_popup({name:'PopupDeliveriesWidget', widget: PopupDeliveriesWidget});
+});
+```
