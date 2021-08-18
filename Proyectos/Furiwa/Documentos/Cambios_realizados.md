@@ -448,9 +448,9 @@ if(current_table == 'Delivery' || current_table == 'delivery' || current_table =
 
         },
         events: {
-            'click .button.cancel':  'click_cancel',
-            'click .button.confirm':  'click_confirm',
-            'click .control-button.delivery': 'deliveries',
+            'click .button.cancel':  'click_cancel',  // Cancelar
+            'click .button.confirm':  'click_confirm',   // Cliente
+            'click .control-button.delivery': 'deliveries',   // Click en algun equipo de ventas
         },
         click_cancel: function(){
             if(this.pos.get_order()){
@@ -464,10 +464,16 @@ if(current_table == 'Delivery' || current_table == 'delivery' || current_table =
             this.gui.show_screen('clientlist');
         },
         deliveries: function(e){
+            // id del equipo de ventas
             var filter = e.target.id;
 
+            // Equipo de ventas
             var team_sales = this.pos.equipo_ventas ? this.pos.equipo_ventas : []
+
+            // Clientes
             var customers = this.pos.db.get_partners_sorted(1000);
+
+            // Cliente seleccionado
             var curr_client = this.pos.get_order().get_client();
             var verify_client = false;
 
@@ -476,9 +482,8 @@ if(current_table == 'Delivery' || current_table == 'delivery' || current_table =
                 for (var j = 0; j < team_sales.length; j++){
                     if(team_sales[j].id == filter){
                         var team_name = team_sales[j].name;
-                        console.log(team_name);
-                        console.log(client_name);
                         if(client_name == team_name){
+                            // Cliente predeterminado de equipo de ventas encontrado
                             verify_client = true;
                             this.pos.get_order().set_client(this.pos.db.get_partner_by_id(customers[i].id));
                         }
@@ -490,6 +495,7 @@ if(current_table == 'Delivery' || current_table == 'delivery' || current_table =
                 verify_client = true;
             }
 
+            // Establecer cliente para los equipos de ventas que no tienen cliente predeterminado
             if(verify_client == false && !curr_client){
                 alert(_t("Debe establecer un cliente primero"));
                 this.gui.show_screen('clientlist');
@@ -502,3 +508,21 @@ if(current_table == 'Delivery' || current_table == 'delivery' || current_table =
     gui.define_popup({name:'PopupDeliveriesWidget', widget: PopupDeliveriesWidget});
 });
 ```
+
+12. El dashboard de seguimiento de pedidos de cocina debe ser para control interno y meramente visual del estado de los pedidos. No debe incidir en ninguna validación del proceso de ventas. El dashboard deberá mostrar únicamente los pedidos de delivery o pickup del restaurante. Solamente tendrá 3 etapas: • Cocina • Facturación • Despachado
+
+
+* Campos a mostrar
+    * Número de orden 
+    * Referencia (Pedido de delcocina) 
+    * Origen (procedencia del pedido) 
+    * Nombre del cliente 
+    * Hora 
+    * Acciones
+
+* Acciones 
+    * Mostrar pedido
+        * Cancelar
+        * Pasar a Facturación | Despachado
+
+

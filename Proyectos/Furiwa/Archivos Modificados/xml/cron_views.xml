@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--  pedidos a finalizado al final del dia -->
+        <record id="state_to_finish" model="ir.cron">
+            <field name="name">Cambiar estado de las ordenes de cocina a finalizado</field>
+            <field name="model_id" ref="model_pos_pedidos_cocina"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">model.estado_a_finalizado()</field>
+            <field name="active">false</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+         <!-- limpiar los pedidos al final del mes-->
+        <record id="delete_ko" model="ir.cron">
+            <field name="name">Eliminar registros de cocina</field>
+            <field name="model_id" ref="model_pos_pedidos_cocina"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">model.eliminar_registros()</field>
+            <field name="active">false</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+     <t t-extend="OrderSelectorWidget">
+        <t t-jquery="div.order-selector" t-operation="append">
+            <t t-if="widget.pos.config.mostrar_inputs">
+                <div class="text-right">
+                    <span class="order-button square btn-mas">
+                        <i class="fa fa-chevron-circle-down" aria-hidden="true"/>
+
+                    </span>
+                    <span class="order-button square btn-regresar">
+                    <i class="fa fa-arrow-left" aria-hidden="true"/>
+                    </span>
+                </div>
+            </t>
+        </t>
+    </t>
+
+    <!--Boton principal POS
+    <t t-name="kitchenControlButton" name="Kitchen Control Button">
+        <div class="control-button" style="width: 20%; height: 50%; margin-top: 5px;margin-bottom: 5px;">
+            <span>
+            <i class="fa fa-list-ul" aria-hidden="true"/>
+            Factura
+            </span>
+        </div>
+    </t>
+    -->
+
+    <!--Para visualizar todos los pedidos de cocina -->
+    <t t-name="KitchenOrdersWidget">
+      <div class="clientlist-screen screen">
+        <div class="screen-content">
+           <section class="top-content">
+              <span class='button back'>
+                 <i class='fa fa-angle-double-left'/>
+                    Cancel
+              </span>
+              <h1>Pedidos Listos para Facturar</h1>
+               <!--
+              <span class='searchbox' style="margin-left:217px !important;">
+                 <input placeholder='Search Orders by ref' />
+                 <span class='search-clear'/>
+              </span>
+              -->
+              </section>
+              <section class="full-content">
+                <div class='window'>
+                  <section class='subwindow collapsed'>
+                     <div class='subwindow-container collapsed'>
+                       <div class='subwindow-container-fix order-details-contents'>
+                       </div>
+                     </div>
+                  </section>
+                  <section class='subwindow'>
+
+                    <div class='subwindow-container'>
+                      <div class='subwindow-container-fix touch-scrollable scrollable-y'>
+                        <table class='client-list'>
+                         <thead>
+                           <tr>
+                             <th>Pedido Cocina</th>
+                             <th>Pedido original</th>
+                             <th>Origen</th>
+                             <th>Referencia</th>
+                             <th>Cliente</th>pos_lock_mode
+                             <th>Acciones</th>
+                           </tr>
+                         </thead>
+                         <tbody class='show-order-list-lines'>
+                         </tbody>
+                      </table>
+                      </div>
+                    </div>
+                 </section>
+                </div>
+            </section>
+          </div>
+       </div>
+    </t>
+
+    <!--Para cargar cada linea de de los pedidos disponibles-->
+    <t t-name="KitchenShowOrderLines">
+    <tr class='order-line' t-att-data-id='order.kitchen_order_name'>
+        <td><t t-esc='order.kitchen_order_name' /></td>
+        <td><t t-esc='order.order_name' /></td>
+        <td><t t-esc='order.source' /></td>
+        <td><t t-esc='order.ref_pedido' /></td>
+        <td><t t-esc='order.partner_name' /></td>
+        <td><button class="repeat-button repeat_order">Mostrar pedido</button></td>
+    </tr>
+    </t>
+
+    <!-- Cargar los la info de los pedidos de cocina -->
+    <t t-name="CargarPedidoWidget">
+        <div class="modal-dialog" role="dialog">
+            <div class="popup popup-selection ">
+                <p class="title">Order</p>
+
+                <div class='selection scrollable-y touch-scrollable' id="div-tabla">
+
+                    <table id = "list" cellspacing = "1px" cellpadding = "10px" text-align = "center"
+                           width="100%" style="border:1px;padding-left:1.16cm;">
+
+                        <thead>
+                            <tr>
+                                <td style="display:none;">ID</td>
+                                <td>Price</td>
+                                <td>Name</td>
+                                <td>Qty </td>
+                                <td style="display:none;" >Dis</td>
+                                <td style="display:none;" >Cliente ID</td>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="footer">
+                    <div class="button confirm">
+                        Cargar a POS
+                        </div>
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="BtnMasWidget">
+        <div class="modal-dialog" role="dialog">
+            <div class="popup popup-selection">
+                <p class="title">Opciones</p>
+                <br/>
+                <div class='selection scrollable-y touch-scrollable'>
+                    <table text-align = "center"  class="option-table-pos" width="100%">
+                        <tr>
+                            <td>
+                                <div class="control-button add-Factura" style="width: 80%; height: 100%; margin-top: 15px;">
+                                     <span>
+                                        <i class="fa fa-list-ul" aria-hidden="true"/>
+                                        Resumen de Pedidos
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 <div class="control-button ver-pedidos" style="width: 80%; height: 100%; margin-top: 15px;">
+                                    <span>
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"/>
+                                        Pedidos Sitio Web
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="footer">
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- TEMPLATES PARA CARGAR PEDIDOS DEL E-COMMERCE
+
+    <t t-name="SalesOrderButton" name="Sales Order Button">
+
+        <div class="control-button" style=" width: 20%;height: 50%;margin-top: 5px;margin-bottom: 5px;">
+        <span>
+            <i class="fa fa-shopping-cart" aria-hidden="true"/>
+            Orders
+        </span>
+        </div>
+    </t>
+     -->
+
+    <t t-name="SaleOrdersWidget">
+      <div class="clientlist-screen screen">
+        <div class="screen-content">
+           <section class="top-content">
+              <span class='button back'>
+                 <i class='fa fa-angle-double-left'/>
+                    Cancel
+              </span>
+              <h1>Pedidos Ecommerce</h1>
+               <!--
+              <span class='searchbox' style="margin-left:217px !important;">
+                 <input placeholder='Search Orders by ref' />
+                 <span class='search-clear'/>
+              </span>
+              -->
+              </section>
+              <section class="full-content">
+                <div class='window'>
+                  <section class='subwindow collapsed'>
+                     <div class='subwindow-container collapsed'>
+                       <div class='subwindow-container-fix order-details-contents'>
+                       </div>
+                     </div>
+                  </section>
+                  <section class='subwindow'>
+
+                    <div class='subwindow-container'>
+                      <div class='subwindow-container-fix touch-scrollable scrollable-y'>
+                        <table class='client-list'>
+                         <thead>
+                           <tr>
+                             <th>Pedido</th>
+                             <th>Cliente</th>
+                             <th>Origen</th>
+                             <th>Referencia</th>
+                             <th>Total</th>
+                             <th>Acciones</th>
+                           </tr>
+                         </thead>
+                         <tbody class='show-order-list-lines'>
+                         </tbody>
+                      </table>
+                      </div>
+                    </div>
+                 </section>
+                </div>
+            </section>
+          </div>
+       </div>
+    </t>
+
+    <t t-name="ShowOrderLines">
+    <tr class='order-line' t-att-data-id='order.order_name'>
+        <td><t t-esc='order.order_name' /></td>
+        <td><t t-esc='order.partner_name' /></td>
+        <td><t t-esc='order.source' /></td>
+        <td><t t-esc='order.ref_pedido' /></td>
+        <td><t t-esc='order.total'/></td>
+        <td><button class="repeat-button repeat_order">Mostrar pedido</button></td>
+    </tr>
+    </t>
+
+    <t t-name="MostrarPedidoWidget">
+        <div class="modal-dialog" role="dialog">
+            <div class="popup popup-selection ">
+                <p class="title">Order</p>
+                <div class='selection scrollable-y touch-scrollable' id="div-tabla">
+
+                    <table id = "list" cellspacing = "1px" cellpadding = "10px" text-align = "center"
+                           width="100%" style="border:1px;padding-left:1.16cm;">
+
+                        <thead>
+                            <tr>
+                                <td style="display:none;">ID</td>
+                                <td>Price</td>
+                                <td>Name</td>
+                                <td>Qty </td>
+                                <td style="display:none;" >Dis</td>
+                                <td style="display:none;" >Cliente ID</td>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="footer">
+                    <div class="button confirm">
+                            Cargar a POS
+                        </div>
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>
+

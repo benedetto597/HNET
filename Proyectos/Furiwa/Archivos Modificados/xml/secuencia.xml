@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequencia del pedido de cocina -->
+        <record id="seq_kitchen_control" model="ir.sequence">
+            <field name="name">Pedido de Cocinar</field>
+            <field name="code">pos_pedidos_cocina.sequence</field>
+            <field name="prefix">KO-</field>
+            <field name="number_increment">1-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

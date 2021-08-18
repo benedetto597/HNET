@@ -201,6 +201,30 @@ _______
 
         return self.env['pos.order'].search_read(domain = [('id', 'in', order_ids)], fields = ['id', 'pos_reference'])
 ```
+
+* Obtener todos los records del modelo actual
+```py
+self.sudo().search([])
+```
+
+* Obtener un campo y multiples campos de un modelo especifico
+```py
+self.env['model.name'].search([('field1', '=', 'value')]).field2
+```
+
+* Forma eficiente de obtener un campo de un modelo especifico
+```py
+wt = self.env['model.name]
+id_solicitado = wt.search([('field1', '=', 'value')]).id
+nuevo = wt.browse(id_neded)
+list = [new.field1, new.field2, new.field3]
+```
+
+* Obtener el último registro de una tabla
+```py
+last_id = self.env['model.name'].seach([])[-1].id
+```
+  
 ______
 #### Frontend - JavaScript - XML 
 * Imprimir en consola el recibo o factura acutal
