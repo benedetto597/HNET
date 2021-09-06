@@ -224,6 +224,23 @@ list = [new.field1, new.field2, new.field3]
 ```py
 last_id = self.env['model.name'].seach([])[-1].id
 ```
+
+* Obtener las sesiones activas o abiertas
+```py
+running_sessions = self.env['pos.session'].sudo().search([('state', '!=', 'closed')])
+```
+* Obtener la sesión actual
+```py
+PosSession = self.env["pos.session"]
+session_id = self.env.context.get('pos_session_id')
+current_session = PosSession.browse(session_id)
+```
+* Dominio de busqueda con distintos valores de un mismo campo
+```py
+domain = [('state', 'in', ['paid','invoiced','done'])]
+domain = AND([domain, [('session_id', 'in', session_ids)]])
+orders = self.env['pos.order'].search(domain)
+```
   
 ______
 #### Frontend - JavaScript - XML 
@@ -233,9 +250,42 @@ ______
 console.log(this.receiptEnv.receipt);
 ```
 
+* Cargar un modelo al POS
+```js   
+// Cargar equipos de ventas al POS
+models.load_models([{
+    model:  'crm.team',
+    fields: ['name'],
+    domain: function(self){ return [['cargar_pos', '=', true]]; },
+    loaded: function(self, equipo_ventas) {
+        self.equipo_ventas = equipo_ventas;
+    }
+}]);
+```
+
 * Imprimir en consola el recibo o factura acutal
 
 ```js
 const order_id = self.db.add_order(order.export_as_JSON());
 var order = self.db.get_order(order_id);
+```
+
+* Imprimir la clase widget en la consola del navegador 
+
+```html
+<!-- Imprimir JSON que produce la clase 'widget' -->
+    <t t-set="wdgt" t-value="widget"/>
+    <t t-esc="value"/>
+    <t t-raw="value"/>
+    <t t-field="odoo.value"/>
+    <t t-js="odoo">
+        console.log("Value", odoo.wdgt);
+    </t>    
+```
+
+* Condicion a partir del modelo en el que se encuentra la clase widget
+
+```html
+<!-- Ocultar los botones a partir del modelo usando 'widget' -->
+    <t t-if="widget.modelName != 'sale.order'">
 ```
