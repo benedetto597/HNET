@@ -1,0 +1,28 @@
+<odoo>
+    <record id="stock_move_cost_tree" model="ir.ui.view">
+        <field name="name">stock.move.cost.tree</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <tree default_order="create_date desc, id desc" create="0" import="0">
+                <field name="state" invisible="1"/>
+                <field name="product_id"/>
+                <field name="name"/>
+                <field name="coste"/>
+                <field name="product_uom_qty"/>
+                <field name="coste_pre"/>
+                <field name="quantity_done"/>
+                <field name="coste_ent"/>
+                <field name="coste_total"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_move_cost_action" model="ir.actions.act_window">
+        <field name="name">Costos Previstos vs Entregados</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="stock_move_cost_tree"/>
+        <field name="domain"></field>
+    </record>
+</odoo>

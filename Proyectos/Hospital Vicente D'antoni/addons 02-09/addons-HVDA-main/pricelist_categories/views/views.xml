@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+       <record id="pricelist_view_inherit" model="ir.ui.view">
+        <field name="name">pricelist_view_inherit</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <sheet position="before">
+                <header>
+                    <button name="action_duplicate_item" type="object" string="Generar Items"/>
+                </header>
+            </sheet>
+           <field name="country_group_ids" position="after">
+                <field name="pricelist_item_id"/>
+                <field name="cat_name"/>
+           </field>
+        </field>
+    </record>
+  </data>
+</odoo>

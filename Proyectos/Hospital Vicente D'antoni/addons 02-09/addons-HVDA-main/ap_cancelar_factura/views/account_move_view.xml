@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+    <record id="btn_cancelar_factura_inherit" model="ir.ui.view">
+        <field name="name">btn.cancelar.factura.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <button name="button_cancel" position="replace">
+                <button name="button_cancel" string="Cancelar Asiento" type="object" groups="account.group_account_invoice" attrs="{'invisible' : ['|','|',('move_type', 'in', ['out_invoice']), ('id', '=', False), ('state', '!=', 'draft')]}"/>
+                <button name="pin_button_cancel" string="Cancelar Factura" type="object" groups="ap_cancelar_factura.ap_cancelar_factura" attrs="{'invisible' : ['|', '|', ('id', '=', False),('move_type', 'not in', ['out_invoice']), ('state', '=', 'cancel')]}"/>
+            </button>
+
+            <button name="button_draft" position="replace">
+                <button name="button_draft" string="Reset to Draft" type="object" groups="account.group_account_invoice" attrs="{'invisible' : ['|',('move_type', 'in', ['out_invoice']), ('show_reset_to_draft_button', '=', False)]}"/>
+            </button>
+
+        </field>
+    </record>
+  </data>
+</odoo>

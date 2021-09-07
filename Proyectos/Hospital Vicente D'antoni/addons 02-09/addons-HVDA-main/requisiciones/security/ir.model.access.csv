@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_requisicion,access.requisicion,requisiciones.model_requisicion,group_admin_req,1,1,1,1
+access_requisicion_abas,access.requisicion.abas,requisiciones.model_requisicion,group_abas_req,1,1,1,1
+access_requisicion_gas,access.requisicion.gas,requisiciones.model_requisicion,group_gas_req,1,1,1,1
+
+access_requisicion_lineas,access.requisicion.lineas,requisiciones.model_requisicion_lineas,group_admin_req,1,1,1,1
+access_requisicion_lineas_abas,access.requisicion.lineas.abas,requisiciones.model_requisicion_lineas,group_abas_req,1,1,1,1
+access_requisicion_lineas_gas,access.requisicion.lineas.gas,requisiciones.model_requisicion_lineas,group_gas_req,1,1,1,1
+
+access_requisiciones_condensadas,access.requisiciones.condensadas,requisiciones.model_requisiciones_condensadas,group_admin_req,1,1,1,1
+access_requisiciones_condensadas_abas,access.requisiciones.condensadas.abas,requisiciones.model_requisiciones_condensadas,group_abas_req,1,1,1,1
+access_requisiciones_condensadas_gas,access.requisiciones.condensadas.gas,requisiciones.model_requisiciones_condensadas,group_gas_req,1,1,1,1
+

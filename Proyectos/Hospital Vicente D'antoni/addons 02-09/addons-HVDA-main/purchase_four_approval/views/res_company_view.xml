@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_company_purchase_approval_form_inherit" model="ir.ui.view">
+        <field name="name">res.company.form.view.inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook[last()]" position="inside"> 
+                <page string="Ajustes Aprobación Compra">
+                    <group>
+                        <group>
+                            <field name="four_step_validation"/>
+                            <field name="email_template_id" attrs="{'invisible':[('four_step_validation','=',False)]}"/>
+                            <field name="refuse_template_id" attrs="{'invisible':[('four_step_validation','=',False)]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="approver_1_amount" attrs="{'invisible':[('four_step_validation','=',False)]}"/>
+                            <field name="approver_2_amount" attrs="{'invisible':[('four_step_validation','=',False)]}"/>
+                            <field name="approver_3_amount" attrs="{'invisible':[('four_step_validation','=',False)]}"/>
+                            <field name="approver_4_amount" attrs="{'invisible':[('four_step_validation','=',False)]}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Model security category -->
+        <record model="ir.module.category" id="module_requisiciones">
+            <field name="name">Requisiciones</field>
+            <field name="description">Requisiciones</field>
+            <field name="sequence">8</field>
+        </record>
+
+        <!-- abastecimiento group -->
+        <record id="group_abas_req" model="res.groups">
+            <field name="name">Requisiciones de Abastecimiento</field>
+            <field name="category_id" ref="module_requisiciones"/>
+        </record>
+
+        <!-- gasto group -->
+        <record id="group_gas_req" model="res.groups">
+            <field name="name">Requisiciones de Gasto</field>
+            <field name="category_id" ref="module_requisiciones"/>
+        </record>
+
+        <!-- Admin group -->
+        <record id="group_admin_req" model="res.groups">
+            <field name="name">Administrador Requisiciones</field>
+            <field name="category_id" ref="module_requisiciones"/>
+            <field name="implied_ids" eval="[(4, ref('group_abas_req')), (4, ref('group_gas_req'))]"/>
+        </record>
+
+        <!-- visual requisiciones Rules -->
+        <record model="ir.rule" id="abastecimiento_rule">
+            <field name="name">Requisiciones: Solo abastecimiento</field>
+            <field name="model_id" ref="model_requisicion"/>
+            <field name="domain_force">[('type', '=', 'abastecimiento')]</field>
+            <field name="groups" eval="[(4,ref('group_abas_req'))]"/>
+        </record>
+
+        <record model="ir.rule" id="gasto_rule">
+            <field name="name">Requisiciones: Solo Gasto</field>
+            <field name="model_id" ref="model_requisicion"/>
+            <field name="domain_force">[('type', '=', 'gasto')]</field>
+            <field name="groups" eval="[(4,ref('group_gas_req'))]"/>
+        </record>
+    </data>
+</odoo>
+
