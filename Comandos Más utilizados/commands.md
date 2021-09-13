@@ -288,4 +288,58 @@ var order = self.db.get_order(order_id);
 ```html
 <!-- Ocultar los botones a partir del modelo usando 'widget' -->
     <t t-if="widget.modelName != 'sale.order'">
+        ```
+
+* Pasar contexto en la llamada de una acción con un botón o link de una vista kanban 
+
+
+```html
+<!-- usando t-attf-data-context -->
+<a style="margin-right: 10px" name="%(action_view_issues_of_task)d" type="action" t-attf-data-context="{'search_default_task_id': [active_id], 'default_task_id': active_id, 'default_project_id': project_id or False, 'default_partner_id': partner_id or False,}">
+```
+
+* Agregar un action menu item
+
+```html
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+<!-- Your List View Definition -->
+<record id="view_your_model_name_tree" model="ir.ui.view">
+    <field name="name">Your.Module.Name_tree</field>
+    <field name="model">your.object</field>
+    <field name="arch" type="xml">
+        <tree string="ANY NAME">
+            <!-- Add All Fields You Want In The List Here -->
+            <field name="db_field_name"/>
+        </tree>
+    </field>
+</record>
+<!-- Your Form View Definition -->
+<record id="view_your_model_name_form" model="ir.ui.view">
+    <field name="name">Your.Module.Name_form</field>
+    <field name="model">your.object</field>
+    <field name="arch" type="xml">
+        <form string="Form View Name" version="7.0">
+            <!-- Add All Fields You Want In The Form Here -->
+            <field name="db_field_name"/>
+        </form>
+    </field>
+</record>
+<!-- Your Action Window Definition -->
+<record id="action_123" model="ir.actions.act_window">
+    <field name="name">Your Module Name</field>
+    <field name="res_model">your.object</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">list,form</field>
+</record>
+<!-- Action Menu Item Related To Above Action Window -->
+<menuitem 
+action="action_123" 
+id="action_menu_123" 
+parent="write_the_parent_menu_id"
+name="Readable Text" 
+sequence="1"/>
+</data>
+</openerp>
 ```
