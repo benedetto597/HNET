@@ -1,8 +1,7 @@
-## Odoo 13 - Proyecto Furiwa
+## Configuración VPN - HENCH
 ### Edgar Josué Benedetto Godoy
 ### 0801-1997-23600
 #### ebenedetto@hnetw.com
-#### edgar.benedetto@unah.hn
 #### +504 3330-0171
 #### 27/07/2021
 ___

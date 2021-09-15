@@ -307,6 +307,25 @@ var order = self.db.get_order(order_id);
 <!-- usando t-attf-data-context -->
 <a style="margin-right: 10px" name="%(action_view_issues_of_task)d" type="action" t-attf-data-context="{'search_default_task_id': [active_id], 'default_task_id': active_id, 'default_project_id': project_id or False, 'default_partner_id': partner_id or False,}">
 ```
+* Cambiar un atributo de un campo existente de un modelo existente - Se convierte en un campo requerido
+```html
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- El campo de equipo de venta en la orden de venta es obligatorio -->
+        <record id="view_order_form_inherit_sale_stock" model="ir.ui.view">
+            <field name="name">sale.order.form.sale.dropshipping</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="team_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+           </field>
+        </record>
+    </data>
+</odoo>
+```
 
 * Agregar un action menu item
 
