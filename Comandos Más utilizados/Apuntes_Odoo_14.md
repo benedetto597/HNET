@@ -186,3 +186,19 @@ def name_get(self):
 * **group_operator** es una función agregada que se utiliza para mostrar resultados en el modo de grupo. Los valores posibles para este atributo incluyen count, count_distinct, array_agg, bool_and, bool_or, max, min, avg y sum. Los tipos de campo entero, flotante y monetario tienen la suma del valor predeterminado para este atributo.
 * **sanitize** La bandera de desinfectar es utilizada por campos HTML y quita su contenido de etiquetas potencialmente inseguras. El uso de esto realiza una limpieza global de la entrada.
 
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+## Capitulo 08 - Técnicas avanzadas de desarrollo del lado del servidor 
+
+### Pasos para crear un asistente o wizard para guiar al usuario
+
+1. Agregue un nuevo modelo transitorio al módulo. Ejemplo:
+```py
+class LibraryRentWizard(models.TransientModel):     
+    _name = 'library.rent.wizard'     
+    
+    borrower_id = fields.Many2one('res.partner',string='Borrower')     
+    book_ids = fields.Many2many('library.book',string='Books')
+```
