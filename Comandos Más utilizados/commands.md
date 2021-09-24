@@ -298,7 +298,7 @@ var order = self.db.get_order(order_id);
 ```html
 <!-- Ocultar los botones a partir del modelo usando 'widget' -->
     <t t-if="widget.modelName != 'sale.order'">
-        ```
+```
 
 * Pasar contexto en la llamada de una acción con un botón o link de una vista kanban 
 
