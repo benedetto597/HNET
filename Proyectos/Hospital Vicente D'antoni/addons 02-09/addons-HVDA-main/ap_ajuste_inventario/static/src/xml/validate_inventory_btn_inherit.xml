@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<templates id="template_Inherit_InventoryLines_Buttons">
-    <t  t-name="InventoryLines.Buttons">
-        <!--<button type="button" class="btn btn-primary o_button_validate_inventory" invisible="1">
-            Validar Inventario!!!!
-        </button>-->
-    </t>
-</templates>
-
