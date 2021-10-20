@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="pin_for_approval_user_form" model="ir.ui.view">
+            <field name="name">pin.for.approval.user.form</field>
+            <field name="model">salesteam.sessions.approval</field>
+                <field name="arch" type="xml">
+                    <form string="Favor Ingresar Pin Para Ingresar a la Sesión de Ventas">
+                        <group>
+                            <field name="sale_users" domain="[('user_id.sale_team_id', '=', sales_team_id)]"/>
+                            <field name="pin" password="True"/>
+                            <field name="sales_team_id" invisible="1"/>
+                        </group>
+                        <footer>
+                            <button name="action_user_approve" type="object" string="Ingresar" class="btn-primary"/>
+                            <button string="_Cancel" class="btn-default" special="cancel" />
+                        </footer>
+                    </form>
+                </field>
+        </record>
+
+        <record id="action_pin_for_approval_user_form" model="ir.actions.act_window">
+            <field name="name">Aprobador Sesión De Ventas</field>
+            <field name="res_model">salesteam.sessions.approval</field>
+            <field name="view_mode">form</field>
+            <field name="groups_id" eval="[(4,ref('sales_team_sessions.group_admin_session')),(4,ref('sales_team_sessions.group_employee_session'))]"/>
+            <field name="view_id" ref="pin_for_approval_user_form"/>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="sale.model_crm_team"/>
+            <field name="binding_view_types">form</field>
+        </record>
+   </data>
+</odoo>

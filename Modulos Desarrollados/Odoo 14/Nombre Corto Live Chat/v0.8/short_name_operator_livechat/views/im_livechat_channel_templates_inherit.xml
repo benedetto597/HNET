@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="qunit_suite" name="livechat_tests" inherit_id="web.qunit_suite_tests">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/short_name_operator_livechat/static/src/legacy/public_livechat.js"></script>
+            </xpath>
+        </template>
+
+        <template id="external_lib" name="Livechat : External Librairies of the Livechat, required to make it work">
+            <script type="text/javascript" src="/short_name_operator_livechat/static/src/legacy/public_livechat.js"></script>
+        </template>
+    </data>
+</odoo>
