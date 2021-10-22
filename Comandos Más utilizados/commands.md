@@ -252,6 +252,31 @@ class AccountJournal(models.Model):
         # ...        
         return rec
 ```
+
+* Heredar una clase de un controller y sobrescribir una función
+    1. Heredar la clase usando **from**
+        ```py
+        from direccion_archivo import clase_herdar
+
+        from odoo.addons.im_livechat.controllers.main import LivechatController
+        ```
+    2. Crear una clase con el nombre de la heredada pero agregandole Inherit y mandando como parámetro la clase heredada
+        ```py
+        class nombre_clase_Inherit(clase_heredada):
+
+        class LivechatControllerInherit(LivechatController):
+        ```
+    3. Escribir el nombre de la función tal cual sale en el archivo original y realizando los cambios requeridos
+        ```py
+        @http.route('/im_livechat/load_templates', type='json', auth='none', cors="*")
+        def load_templates(self, **kwargs):
+            base_url = request.httprequest.base_url
+            templates = [
+                'short_name_operator_livechat/static/src/legacy/public_livechat.xml',
+            ]
+            return [tools.file_open(tmpl, 'rb').read() for tmpl in templates]
+        ```
+
 ______
 #### Frontend - JavaScript - XML 
 * Imprimir en consola el recibo o factura acutal
