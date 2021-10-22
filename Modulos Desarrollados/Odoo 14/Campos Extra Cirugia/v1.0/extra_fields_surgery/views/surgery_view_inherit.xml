@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Campos añadidos Precio Unitario & Subtotal -->
+        <record id="hms_surgery_template_view_inherit" model="ir.ui.view">
+            <field name="name">hms.surgery.template.view.inherit</field>
+            <field name="model">hms.surgery.template</field>
+            <field name="inherit_id" ref="acs_hms_surgery.hms_surgery_template_view"/>
+            <field name="arch" type="xml">
+                <field name="qty" position="after">
+                    <field name="product_unit_price" required="1"/>
+                    <field name="product_subtotal" required="1"/>
+                </field>
+           </field>
+        </record>
+        <!-- Campos añadidos Total -->
+        <record id="hms_surgery_template_view_inherit_total" model="ir.ui.view">
+            <field name="name">hms.surgery.template.view.inherit.total</field>
+            <field name="model">hms.surgery.template</field>
+            <field name="inherit_id" ref="acs_hms_surgery.hms_surgery_template_view"/>
+            <field name="arch" type="xml">
+                <group name="consumables" position="after">
+                    <group name="note_group" col="6" class="mt-2 mt-md-0">
+                        <group class="oe_subtotal_footer oe_right" colspan="2">
+                            <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                <label for="total_consumables"/>
+                            </div>
+                            <field name="total_consumables" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" />
+                        </group>
+                        <div class="oe_clear"/>
+                    </group>
+                </group>
+           </field>
+        </record>
+    </data>
+</odoo>
