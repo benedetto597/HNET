@@ -27,9 +27,18 @@ class CrmTeam(models.Model):
         """
         wizard_form = self.env.ref('sales_team_sessions.pin_for_approval_user_form', False)
         wiz_model_id = self.env['salesteam.sessions.approval']
-        vals = {
-            'sales_team_id': self.id,
-        }
+        # Seleccionar al usuario loggeado si se encuentra en el equipo de ventas al que pertenece
+        if self.env.user.sale_team_id.id == self.id:
+            employee_id = self.env['hr.employee'].search([('user_id', '=', self.env.user.id)]).id
+            vals = {
+                'sales_team_id': self.id,
+                'sale_users': employee_id,
+            }
+
+        else:
+            vals = {
+                'sales_team_id': self.id,
+            }
         new = wiz_model_id.create(vals)
 
         return {
