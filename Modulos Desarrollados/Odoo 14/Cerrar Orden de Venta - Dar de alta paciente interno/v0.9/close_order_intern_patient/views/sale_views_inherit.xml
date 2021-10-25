@@ -11,7 +11,7 @@
         <xpath expr="//button[@name='action_quotation_send']" position="after">
           <!-- Agregar el botón "Dar de Alta" -->
           <button name="close_order" type="object" class="btn-primary" string="Dar de Alta"
-            groups="account.group_account_user" attrs="{'invisible':[('pricelist_id', '=', 1)]}"/>
+            groups="account.group_account_user" attrs="{'invisible':[('pricelist_id', '=', 1), ('order_close', '=', True)]}"/>
         </xpath>
         <field name="partner_id" position="after">
           <field name="can_edit" invisible="1"/>
