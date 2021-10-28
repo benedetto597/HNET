@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--增加成品，半成品与原料-->
+<!--        <record id="product_category_finished" model="product.category">-->
+<!--            <field name="name">Finished Product</field>-->
+<!--            <field name="ref">PF</field>-->
+<!--            <field name="parent_id" ref="product.product_category_all"/>-->
+<!--            <field name="product_sequence" ref="seq_mrp_finished"/>-->
+<!--            <field name="type">product</field>-->
+<!--            <field name="sale_ok">1</field>-->
+<!--            <field name="purchase_ok">0</field>-->
+<!--        </record>-->
+<!--        <record id="product_category_semi" model="product.category">-->
+<!--            <field name="name">Semi Product</field>-->
+<!--            <field name="ref">PS</field>-->
+<!--            <field name="parent_id" ref="product.product_category_all"/>-->
+<!--            <field name="product_sequence" ref="seq_mrp_semi"/>-->
+<!--            <field name="type">product</field>-->
+<!--            <field name="sale_ok">0</field>-->
+<!--            <field name="purchase_ok">0</field>-->
+<!--        </record>-->
+<!--        <record id="product_category_raw" model="product.category">-->
+<!--            <field name="name">Raw Material</field>-->
+<!--            <field name="ref">PR</field>-->
+<!--            <field name="parent_id" ref="product.product_category_all"/>-->
+<!--            <field name="product_sequence" ref="seq_mrp_raw"/>-->
+<!--            <field name="type">product</field>-->
+<!--            <field name="sale_ok">0</field>-->
+<!--            <field name="purchase_ok">1</field>-->
+<!--        </record>-->
+        <!--原有目录对应产品编号初始化-->
+        <record id="product.product_category_all" model="product.category">
+            <field name="ref">PN</field>
+            <field name="product_sequence" ref="seq_product_default"/>
+            <field name="type">product</field>
+            <field name="sale_ok">0</field>
+            <field name="purchase_ok">0</field>
+        </record>
+        <!--<record id="product.product_category_1" model="product.category">-->
+            <!--<field name="product_sequence" ref="seq_mrp_finished"/>-->
+            <!--<field name="type">consu</field>-->
+            <!--<field name="sale_ok">1</field>-->
+            <!--<field name="purchase_ok">1</field>-->
+        <!--</record>-->
+    </data>
+</odoo>
