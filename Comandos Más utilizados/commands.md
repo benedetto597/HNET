@@ -244,7 +244,7 @@ orders = self.env['pos.order'].search(domain)
 * Sobrescribir la función ***create*** de un modelo heredado
 ```py
 class AccountJournal(models.Model):
-    _inherit = "account.journal"
+    _inheri••••••t = "account.journal"
 
     @api.model
     def create(self, vals):
