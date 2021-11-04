@@ -1,0 +1,37 @@
+    # Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* contact_sequence
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-11 20:35+0000\n"
+"PO-Revision-Date: 2021-03-11 20:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: contact_sequence
+#: model:ir.model.fields.selection,name:contact_sequence.selection__res_partner__contact_type__client
+msgid "Client"
+msgstr "Cliente"
+
+#. module: contact_sequence
+#: model:ir.model,name:contact_sequence.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: contact_sequence
+#: model:ir.model.fields,field_description:contact_sequence.field_res_partner__contact_type
+#: model:ir.model.fields,field_description:contact_sequence.field_res_users__contact_type
+msgid "Contact Type"
+msgstr "tipo de Contacto"
+
+#. module: contact_sequence
+#: model:ir.model.fields.selection,name:contact_sequence.selection__res_partner__contact_type__supplier
+msgid "Supplier"
+msgstr "Proveedor"

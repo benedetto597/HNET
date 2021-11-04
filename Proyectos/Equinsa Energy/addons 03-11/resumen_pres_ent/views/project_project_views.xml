@@ -1,0 +1,35 @@
+<odoo>
+  <data>
+   <record id="project_project_btn_inherit" model="ir.ui.view">
+        <field name="name">project.project.btn.inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button string="Entregado vs Presupuestado" class="oe_stat_button" name="open_stock_moves" type="object" icon="fa-dollar"/>
+            </xpath>
+            <page name="settings" position="after">
+                <page name="Materiales" string="Materiales">
+                    <field name="resumen_ids"/>
+                    <group name="totales_group" col="6">
+                        <group class="oe_subtotal_footer oe_right" colspan="6" name="resumen_transferencias_totales">
+                            <h3>INFORME</h3>
+                            <field name="total_presupuestado" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_real" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_desviacion_costo" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+			    <field name="total_desviacion_cantidad" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_desviacion_economica" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+
+                            <h3>COTIZACIÓN</h3>
+                            <field name="total_utilidad" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_imprevistos" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_administracion" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <div class="oe_clear"/>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+  </data>
+</odoo>

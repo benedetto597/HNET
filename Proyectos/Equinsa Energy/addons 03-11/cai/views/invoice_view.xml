@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+            <record id="invoice_form1" model="ir.ui.view">
+                <field name="name">account.move.customized.inwords</field>
+                <field name="model">account.move</field>
+                <field name="inherit_id" ref="account.view_move_form"/>
+                <field name="arch" type="xml">
+                    <field name="narration" position="before">
+                        <group>
+                            <field name="amount_words"/>
+                        </group>
+                    </field>
+                </field>
+            </record>
+
+             <record id="invoice_form_extra" model="ir.ui.view">
+                <field name="name">account.move.customized.extra</field>
+                <field name="model">account.move</field>
+                <field name="inherit_id" ref="account.view_move_form"/>
+                <field name="arch" type="xml">
+                    <field name="invoice_partner_bank_id" position="after">
+                              <group string="SAR">
+                                <field name="exempt_PO"/>
+                                <field name="exoneratedCard"/>
+                                <field name="regSag"/>
+                              </group>
+                     </field>
+                 </field>
+            </record>
+
+             <record id="invoice_form_tax" model="ir.ui.view">
+                <field name="name">account.move.customized.tax</field>
+                <field name="model">account.move</field>
+                <field name="inherit_id" ref="account.view_move_form"/>
+                <field name="arch" type="xml">
+                    <field name="amount_untaxed" position="after">
+                            <field name="x_desc" readonly="1"/>
+                            <field name="x_exonerado" readonly="1"/>
+                            <field name="x_exento" readonly="1"/>
+                            <field name="x_gravado15" readonly="1"/>
+                            <field name="x_gravado18" readonly="1"/>
+                            <field name="x_isv18" readonly="1"/>
+                    </field>
+                </field>
+            </record>
+
+
+    </data>
+</odoo>

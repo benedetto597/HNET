@@ -1,0 +1,901 @@
+<odoo>
+    <data>
+        <!-- Main template -->
+        <template id="report_factura">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report_energia_solar.report_factura_template" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+
+		<!-- logo y Num Factura -->
+        <template id="logo_num_factura">
+				<table width="100%" class="body" style="margin-top: 30px; margin-left: 25px;">
+				<tr>
+					<!-- top logo -->
+					<td width="60%" align="left" style="vertical-align:top;position: relative;">
+						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" class="float-left" alt="Logo" style="max-width: 300px;width: 300%;display:inline-block"/>
+					</td>
+					<!-- Numero Factura -->
+					<td style="width: 40%" align="left">
+						<table width="100%" align="right" class="inside-tables" style="margin-top: -3px; margin-right: 45px;">
+							<tr>
+								<td style="font-size: 12px" align="center">
+									<t t-if="o.state != 'draft'">
+										<h4 t-attf-class="#{'note_de_credito' if o.type == 'out_refund' else ''}" style="margin-bottom: 3px;margin-top: 3px;font-weight: bold;">
+											<t t-if="o.type == 'out_refund'">NOTA DE CREDITO</t>
+											<t t-if="o.type != 'out_refund'">FACTURA</t>
+										</h4>
+										<h4>
+										<span t-esc="o.name"/>
+										</h4>
+										<br/>
+									</t>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+        </template>
+
+		<!--Informacion empresa y fecha de facturas-->
+		<template id="info_empresa">
+			<table width="40%" class="body inside-tables" style="font-size: 10px; margin-top: 15px; margin-left: 25px; display: inline-block;">
+				<!-- Nombre de la empresa -->
+				<tr>
+					<td>
+						<b style="font-size: 15px;" t-if="o.company_id.name">
+							<t t-esc="o.company_id.name"/>
+							<br/>
+						</b>
+					</td>
+				</tr>
+				<!-- RTN -->
+				<tr>
+					<td width="60%">
+						<b class="text-left color-highlight">R.T.N:</b>
+						<span class="text-left">
+							<t t-esc="o.company_id.vat"/>
+						</span>
+					</td>
+				</tr>
+				<!-- Direccion -->
+				<tr>
+					<td>
+						<a t-esc="o.company_id.street"/>
+					</td>
+				</tr>
+				<!-- PBX y FAX -->
+				<tr>
+					<td>
+						<b class="text-left color-highlight">PBX:</b>
+						<span class="text-left">
+							<t t-esc="o.company_id.mobile"/>
+						</span>
+						<b class="text-left color-highlight">FAX:</b>
+						<span class="text-left">
+							<t t-esc="o.company_id.fax"/>
+						</span>
+					</td>
+				</tr>
+				<!-- EMAIL -->
+				<tr>
+					<td>
+						<span class="text-left">Correo Electrónico:
+							<a style="color: #0000EE;"><t t-esc="o.company_id.email"/></a>
+						</span>
+					</td>
+				</tr>
+				<!-- CAI -->
+				<tr>
+					<td>
+						<b class="text-left color-highlight">CAI:</b>
+						<span class="text-left">
+							<a style="color: #0000EE;"><t t-esc="o.cai_shot if o.cai_shot else '' "/></a>
+						</span>
+					</td>
+				</tr>
+				<!-- Rango CAI -->
+				<tr>
+					<td>
+						<span class="text-left">Rango:
+						  <t t-if="o.min_number_shot and o.max_number_shot">
+						    <t t-esc="o.min_number_shot"/>&amp;nbsp;al &amp;nbsp; <t t-esc="o.max_number_shot"/>
+						  </t>
+
+						</span>
+					</td>
+				</tr>
+				<!-- Fecha Expiracion CAI -->
+				<tr>
+					<td>
+						<span class="text-left">Fecha Límite de Emisión:
+
+							<t t-esc="o.cai_expires_shot.strftime('%d/%m/%Y') if o.cai_expires_shot else '' "/>
+						</span>
+					</td>
+				</tr>
+			</table>
+
+			<!-- Tabla de fechas superior -->
+			<table width="30%" align="right" class="inside-tables" style="font-size: 10px; margin-top: 15px; margin-right: 27px;">
+				<tr class="center">
+					<td class="inside-tables product-table-header"><b>Fecha Emisión:</b></td>
+					<td class="inside-tables"><b t-esc="o.invoice_date.strftime('%d/%m/%Y') if o.invoice_date else ''"/></td>
+				</tr>
+				<tr class="center">
+					<td class=" inside-tables product-table-header"><b>Fecha Límite Pago: </b></td>
+					<td class="inside-tables">
+						<t t-if="o.invoice_payment_term_id">
+							<t t-set="payment_term_days" t-value="o.invoice_payment_term_id.name.split(' ')[0]"/>
+							<t t-set="invoice_payment_date" t-value="o.invoice_date + datetime.timedelta(days=int(payment_term_days))"/>
+							<b t-esc="invoice_payment_date.strftime('%d/%m/%Y')"/>
+						</t>
+						<t t-else="">
+							<b t-esc="o.invoice_date_due.strftime('%d/%m/%Y')"/>
+						</t>
+
+
+					</td>
+				</tr>
+			</table>
+		</template>
+
+		<!-- Informacion cliente -->
+		<template id="info_cliente">
+			<table class="inside-tables side-margins" align="center" width="94%" style="font-size:10px;">
+				<tr class="inside-tables">
+					<td class="inside-tables center product-table-header" style="vertical-align : middle;" rowspan="2"><b>CLIENTE</b></td>
+					<td class="inside-tables center"> <b t-esc="o.partner_id.name"/></td>
+					<td class="inside-tables center product-table-header"> <b>Código Cliente: </b></td>
+					<td class="inside-tables center"> <b t-esc="o.partner_id.codigo_cliente.upper()" t-if="o.partner_id.codigo_cliente"/></td>
+				</tr>
+				<tr>
+					<td class="inside-tables center"><b t-esc="o.ref" t-if="o.ref" /></td>
+					<td class="inside-tables center product-table-header" style="text-align:center;"> <b>RTN Cliente: </b></td>
+					<td class="inside-tables center"><b t-esc="o.partner_id.vat"/></td>
+				</tr>
+
+			</table>
+		</template>
+
+		<!-- Tabla de pedido -->
+		<template id="tabla_pedido">
+			<t t-set="line_count" t-value="0"/>
+			<p t-foreach="o.invoice_line_ids" t-as="i">
+			  <t t-set="line_count" t-value="line_count + 1"/>
+			</p>
+
+			<div width="94%" t-att-class="'side-margins' if line_count &lt; 20 else 'here div-height2 side-margins'" style="margin-bottom:0px">
+
+				<table class="div-height" width="100%">
+  				<thead>
+  					<tr class="product-table-header center">
+  					<th class="pt-header" style="vertical-align : middle; width:8%">CANTIDAD</th>
+  					<th class="pt-header" style="vertical-align : middle; width:41%">NOMBRE</th>
+  					<th class="pt-header" style="width:12%; vertical-align : middle;">PRECIO UNITARIO</th>
+  					<th class="pt-header" style="width:12%; vertical-align : middle;">Descuento y Rebajas Otorgadas</th>
+  					<th class="pt-header" style="vertical-align : middle; width:12%">TOTAL</th>
+  				</tr>
+  				</thead>
+
+	    	<tbody>
+        	<t t-set="current_subtotal" t-value="0"/>
+
+        	<t t-if="o.invoice_origin">
+        	  <t t-set="invoice_sale_order" t-value="request.env['sale.order'].search([('name', '=', o.invoice_origin)])"/>
+        	</t>
+
+        	 <t t-if="invoice_sale_order">
+        	      <t t-if="invoice_sale_order.sale_order_template_id">
+        	      	<t t-set="sale_order_template_id" t-value="True"/>
+        	      </t>
+        	      <t t-else="">
+        	        <t t-set="sale_order_template_id" t-value="False"/>
+        	      </t>
+        	  </t>
+
+        	<t t-foreach="o.invoice_line_ids" t-as="lines_id">
+        		<t t-set="current_subtotal" t-value="current_subtotal + lines_id.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+            <t t-set="current_subtotal" t-value="current_subtotal + lines_id.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                <t t-if="sale_order_template_id">
+                  <t t-if="lines_id.display_type == 'line_section'">
+                      <t t-set="current_section" t-value="lines_id"/>
+                      <t t-set="current_subtotal" t-value="0"/>
+                  </t>
+            		  <t t-if="current_section and (lines_id_last or o.invoice_line_ids[lines_id_index+1].display_type == 'line_section')">
+                        <tr style="font-size:11px; vertical-align:bottom;" height="20px">
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                           <td name="td_section_line" align='left' style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+                                    <span t-field="current_section.name"/>
+                            </td>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                            <td name="td_section_subtotal" align="center" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+                                <span t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                    </t>
+
+                </t>
+                <t t-else="">
+
+            		<tr style="font-size:11px; vertical-align:bottom;" height="20px">
+        			    <t t-if="not lines_id.display_type">
+        			       	<td class="text-center" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        						<t t-esc="lines_id.quantity"/>
+        					</td>
+        					<td align="center" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        						<t t-esc="lines_id.name"/>
+        					</td>
+        					<td align="center" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        					  <span t-field="o.currency_id.symbol"/>
+        						<span t-field="lines_id.price_unit" class="pull-center ml8"/>
+        					</td>
+        					 <td align="center" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        					   <span t-field="o.currency_id.symbol"/>
+        						<span t-field="lines_id.discount" class="pull-center ml8"/>
+        					 </td>
+        					<td align="center" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        						<span t-field="lines_id.price_subtotal" class="pull-center ml8"/>
+        					</td>
+        				</t>
+        				<t t-if="lines_id.display_type == 'line_section'">
+        				          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td name="td_section_line" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+        	                    <span t-field="lines_id.name"/>
+        	                </td>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <t t-set="current_section" t-value="lines_id"/>
+        	                <t t-set="current_subtotal" t-value="0"/>
+        	            </t>
+
+        	            <t t-if="lines_id.display_type == 'line_note'">
+        	              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td name="td_note_line" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+        	                    <span t-field="lines_id.name"/>
+        	                </td>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	            </t>
+
+        	    	</tr>
+
+        	    	<t t-if="current_section and (lines_id_last or o.invoice_line_ids[lines_id_index+1].display_type == 'line_section')">
+                        <tr class="is-subtotal text-right">
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                            <td name="td_section_subtotal" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+                                <strong class="mr16">subtotal</strong>
+                                <span t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                    </t>
+
+                </t>
+
+
+        	</t>
+        	 <tr>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+          </tr>
+
+         </tbody>
+		  	</table>
+			</div>
+
+		  <div class="side-margins" style="margin-top:0px">
+		    <table align="right" width="100%">
+		      <tr >
+		        <td style="width:8%; border-top:none;"/>
+		        <td style="width:41%; border-top:none;"/>
+
+		        <td colspan="2" class="text-center" style="width:24%; border: 1px solid black; border-top:none; ">TOTAL</td>
+		        <td  class="text-center" style="width:12%; border: 1px solid black; border-top:none;">
+		          <t t-esc="o.amount_untaxed" t-options="{'widget':'monetary', 'display_currency': o.currency_id}"/>
+	          </td>
+		      </tr>
+		    </table>
+		  </div>
+		</template>
+
+		<!-- Totalizadores -->
+		<template id="totalizadores">
+
+			 <div style="clear:both;">
+				<table width="55%" style="display:inline-block; margin-left:25px;">
+
+						<tr class="color-highlight-totals center">
+							<td colspan="2">Valor en letras: <t t-esc="o.amount_words"/> </td>
+						</tr>
+
+						<tr width="100%" height="30px">
+							<td colspan="2" style="vertical-align : middle;"><b> La factura es beneficio de todos, EXIGALA!</b></td>
+						</tr>
+						<tr class="inside-tables" width="100%">
+							<td width="50%">No.Correlativo de la orden de Compra Exenta</td>
+							<td width="50%" class="color-highlight-totals"/>
+						</tr>
+						<tr class="inside-tables">
+							<td>No.Correlativo de la Constancia del registro Exonerado</td>
+							<td class="color-highlight-totals"/>
+						</tr>
+						<tr class="inside-tables">
+							<td>No. Identificativo del registro de la SAG</td>
+							<td class="color-highlight-totals"/>
+						</tr>
+						<tr height="50px">
+							<td colspan="2" style="font-size:8px; vertical-align : bottom;">
+								ORIGINAL: CLIENTE    COPIA: OBLIGADO TRIBUTARIO EMISOR
+							</td>
+							</tr>
+					</table>
+
+					<table width="27%" align="right" style=" margin-right: 20px; display:inline-block">
+						<tr style="text-align:right;">
+							<td><b>IMPORTE EXONERADO</b></td>
+							<td class="color-highlight-totals">L 0.0</td>
+						</tr>
+						<tr style="text-align:right;">
+							<td><b>IMPORTE EXENTO</b></td>
+							<td class="color-highlight-totals">  <b t-esc="o.currency_id.symbol"/><b t-esc="o.x_exento"/></td>
+						</tr>
+						<tr style="text-align:right;">
+							<td><b>IMPORTE GRAVADO 15%</b></td>
+							<td class="color-highlight-totals"> <b t-esc="o.currency_id.symbol"/> <b t-esc="o.x_gravado15"/></td>
+						</tr>
+						<tr style="text-align:right;">
+							<td><b>IMPORTE GRAVADO 18%</b></td>
+							<td class="color-highlight-totals">L 0.0</td>
+						</tr>
+						<tr style="text-align:right;">
+							<td><b>ISV 15%</b></td>
+							<td class="color-highlight-totals">
+							<t t-foreach="o.amount_by_group" t-as="i">
+								 <b t-esc="i[3]"/>
+								</t>
+							</td>
+						</tr>
+						<tr style="text-align:right;">
+							<td><b>ISV 18%</b></td>
+							<td class="color-highlight-totals">L 0.0</td>
+						</tr>
+						<tr style="text-align:right;">
+							<td><b>TOTAL A PAGAR</b></td>
+							<td class="color-highlight-totals"> <b t-esc="o.currency_id.symbol"/> <b t-esc="o.amount_total"/></td>
+						</tr>
+					</table>
+			</div>
+
+		</template>
+
+		<!-- Segunda pagina: reporte energia y logo  -->
+        <template id="reporte_logo">
+				<table width="100%" class="body" style="margin-top: 30px; margin-left: 25px;">
+				<tr style="vertical-align:middle;">
+					<!-- Numero Factura -->
+					<td style="width: 50%; vertical-align:middle;" align="left">
+						<table width="80%" align="left" class="inside-tables" style="margin-left: 5px;">
+							<tr>
+								<td style="font-size: 12px; vertical-align:middle;" align="center">
+									<h4 style="font-weight: bold; color:#a0c069;">
+										REPORTE ENERGIA
+									</h4>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<!-- top logo -->
+					<td width="50%" align="right" style="vertical-align:top;position: relative;">
+						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" class="float-left" alt="Logo" style="max-width: 300px;width: 300%;display:inline-block"/>
+					</td>
+
+				</tr>
+			</table>
+        </template>
+
+		<!-- Segunda pagina: informacion empresa y resumen cliente -->
+		<template id="resumen_empresa_cliente">
+			<!-- Resumen datos empresa -->
+			<table width="40%" class="body inside-tables" style="font-size: 10px; margin-top: 15px; margin-left: 25px; display: inline-block;">
+				<!-- Direccion -->
+				<tr align="center">
+					<td>
+						<b t-esc="o.company_id.street"/>
+					</td>
+
+				</tr>
+				<!-- Email -->
+				<tr align="center">
+					<td>
+						<a style="color: #0000EE;"><t t-esc="o.company_id.email"/></a>
+					</td>
+				</tr>
+
+				<!-- PBX y FAX -->
+				<tr>
+					<td>
+						<b class="text-left color-highlight">PBX:</b>
+						<span class="text-left">
+							<t t-esc="o.company_id.mobile"/>
+						</span>
+						<b class="text-left color-highlight">FAX:</b>
+						<span class="text-left">
+							<t t-esc="o.company_id.fax"/>
+						</span>
+					</td>
+				</tr>
+				<!-- RTN -->
+				<tr>
+					<td width="60%">
+						<b class="text-left color-highlight">R.T.N:</b>
+						<span class="text-left">
+							<t t-esc="o.company_id.vat"/>
+						</span>
+					</td>
+				</tr>
+				<!-- CAI -->
+				<tr>
+					<td>
+						<b class="text-left color-highlight">CAI:</b>
+						<span class="text-left">
+							<a style="color: #0000EE;"><t t-esc="o.cai_shot"/></a>
+						</span>
+					</td>
+				</tr>
+			</table>
+
+			<!-- Resumen datos cliente -->
+			<table width="50%" align="right" class="inside-tables" style="font-size: 10px; margin-top: 15px; margin-right: 27px;">
+				<tr class="center">
+					<td width="30%" class="product-table-header inside-tables" style="vertical-align : middle;"><b>Cliente</b></td>
+					<td width="30%"><b t-esc="o.partner_id.name"/></td>
+					<td width="40%" style="vertical-align : middle;" rowspan="5"><b t-esc="o.partner_id.region_cliente.upper()" t-if="o.partner_id.region_cliente" /></td>
+				</tr>
+				<tr class="center">
+					<td class="product-table-header inside-tables" style="vertical-align : middle;"><b>RTN Cliente</b></td>
+					<td><b t-esc="o.partner_id.vat"/> </td>
+				</tr>
+				<tr class="center">
+					<td class="product-table-header inside-tables"><b>Codigo Cliente</b></td>
+					<td><b t-esc="o.partner_id.codigo_cliente" t-if="o.partner_id.codigo_cliente"/> </td>
+				</tr>
+				<tr class="center">
+					<td class="product-table-header inside-tables"><b>Fecha Emisión:</b></td>
+					<td><b t-esc="o.invoice_date.strftime('%d/%m/%Y')"/></td>
+				</tr>
+				<tr class="center">
+					<td class="product-table-header inside-tables"><b>Fecha Límite Pago: </b></td>
+					<td><b t-esc="o.invoice_date_due.strftime('%d/%m/%Y')"/> </td>
+				</tr>
+			</table>
+		</template>
+
+		<!-- Segunda pagina: Tabla resumen datos -->
+		<template id="resumen_datos">
+			<table style="margin-left:25px; margin-right:25px">
+				<tr>
+					<th class="product-table-header inside-tables center">TARIFA ENEE</th>
+					<th class="product-table-header inside-tables center">TARIFA EQUINSA</th>
+					<th class="product-table-header inside-tables center">AHORRO TARIFA</th>
+					<th class="product-table-header inside-tables center">FECHA DE LECTURA ACTUAL</th>
+					<th class="product-table-header inside-tables center">LECTURA ACTUAL</th>
+					<th class="product-table-header inside-tables center">LECTURA ANTERIOR</th>
+					<th class="product-table-header inside-tables center">KWH GENERADOS</th>
+					<th class="product-table-header inside-tables center">KWH EXEDENTES Y CONSUMIDOS</th>
+					<th class="product-table-header inside-tables center">KWH FACTURADOS</th>
+				</tr>
+				<tr>
+					<td class="inside-tables center"><b t-esc="'{:.2f}'.format(o.data_entry.tarifa_enee)"/></td>
+					<td class="inside-tables center"><b t-esc="'{:.2f}'.format(o.data_entry.tarifa_equinsa)"/></td>
+					<td class="inside-tables center"><b t-esc="'{:.2%}'.format(o.data_entry.ahorro_tarifa)"/></td>
+					<td class="inside-tables center"><b t-esc="o.data_entry.f_lectura_actual.strftime('%d/%m/%Y')"/></td>
+					<td class="inside-tables center"><b t-esc="'{:,.2f}'.format(o.data_entry.lectura_actual)"/></td>
+					<td class="inside-tables center"><b t-esc="'{:,.2f}'.format(o.data_entry.lectura_anterior)"/></td>
+					<td class="inside-tables center"><b t-esc="'{:.2f}'.format(o.data_entry.kwh_generados)"/></td>
+					<td class="inside-tables center"><b t-esc="'{:.2f}'.format(o.data_entry.kwh_excendentes)"/></td>
+					<td class="inside-tables center"><b t-esc="'{:.2f}'.format(o.data_entry.kwh_facturados)"/></td>
+				</tr>
+			</table>
+			<br/>
+			<!-- ahorros acumulados -->
+			<table width="80%" style="margin-left:70px;">
+				<tr>
+					<td class="product-table-header inside-tables center"><b>AHORROS ACUMULADOS</b></td>
+					<td class="inside-tables center"><b t-esc="'{:.2f}'.format(o.data_entry.ahorro_acumulado)"/></td>
+				</tr>
+			</table>
+		</template>
+
+		<!-- Segunda pagina: balance de pagos previos  DE AQUI EN ADELANTE -->
+		<template id="resumen_pagos_previos">
+			<br/>
+			<br/>
+			<table style="margin-left:15px;" align="left" width="257px">
+				<tr>
+					<th class="center product-table-header inside-tables" colspan="2"><b>BALANCE DE PAGOS PREVIOS</b></th>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Factura Anterior</td>
+					<td class="center inside-tables">L 0.00</td>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Pagos del periodo</td>
+					<td class="center inside-tables">L 0.00</td>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Saldo Actual</td>
+					<td class="center inside-tables">L 0.00</td>
+				</tr>
+				<tr>
+					<td class="center"><b>TOTAL</b></td>
+					<td class="center inside-tables"><b>L 0.00</b></td>
+				</tr>
+
+			</table>
+		</template>
+
+		<!-- Segunda pagina: cargos del periodo -->
+		<template id="resumen_cargos_periodo">
+			<br/>
+			<br/>
+			<br/>
+			<table  style="margin-left:15px;" width="257px">
+				<tr>
+					<th class="center product-table-header inside-tables" colspan="2"><b>CARGOS DEL PERÍODO</b></th>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Precio Unitario (LPS/KWH)</td>
+					<td class="center inside-tables">L <t t-esc="o.data_entry.tarifa_equinsa"/></td>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Energía Suministrada (KWH)</td>
+					<td class="center inside-tables"><t t-esc="'{:,.2f}'.format(o.data_entry.kwh_facturados)"/></td>
+				</tr>
+				<tr>
+					<td class="center"><b>TOTAL</b></td>
+					<td class="center inside-tables"> <b t-esc="o.currency_id.symbol" /> <b t-esc="'{:,.2f}'.format(o.data_entry.subtotal)" /></td>
+				</tr>
+			</table>
+		</template>
+
+		<!-- Segunda pagina: otros creditos o debitos -->
+		<template id="resumen_credtos_debitos">
+			<br/>
+			<br/>
+			<br/>
+			<table style="margin-left:15px;" width="257px">
+				<tr>
+					<th class="center product-table-header inside-tables" colspan="2"><b>OTROS CRÉDITOS O DÉBITOS</b></th>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Créditos</td>
+					<td class="center inside-tables">L 0.00</td>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Débitos</td>
+					<td class="center inside-tables">L 0.00</td>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Otros</td>
+					<td class="center inside-tables">L 0.00</td>
+				</tr>
+				<tr>
+					<td class="center"><b>TOTAL</b></td>
+					<td class="center inside-tables">L 0.00</td>
+				</tr>
+			</table>
+		</template>
+
+		<!-- Segunda pagina: Total Cargos -->
+		<template id="total_cargos">
+			<br/>
+			<br/>
+			<br/>
+			<table style="margin-left:15px;" width="257px">
+				<tr>
+					<td style="text-align:right;" class="center product-table-header inside-tables"> <b>TOTAL CARGOS </b></td>
+					<td class="center product-table-header inside-tables"><b t-esc="o.currency_id.symbol" /> <b t-esc="'{:,.2f}'.format(o.data_entry.subtotal)" /></td>
+				</tr>
+
+			</table>
+		</template>
+
+		<!-- Segunda pagina: Desglose de factura -->
+		<template id="desglose_factura">
+			<table  class="inside-tables" style="margin-left: 15px; margin-right: 10px;" width="80%" >
+				<tr >
+					<th class="center product-table-header inside-tables" colspan="2"><b>DESGLOSE DE FACTURA</b></th>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Amortizacion</td>
+					<td class="center inside-tables"> <t t-esc="o.currency_id.symbol"/><t t-esc="'{:,.2f}'.format(o.data_entry.total_amortizacion)"/></td>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Oper. y Mant (O &amp; M)</td>
+					<td class="center inside-tables"> <t t-esc="o.currency_id.symbol"/><t t-esc="'{:,.2f}'.format(o.data_entry.total_oym_granja)"/></td>
+				</tr>
+				<tr>
+					<td class="center inside-tables">ISV (O &amp; M)</td>
+					<td class="center inside-tables">
+						<t t-foreach ="o.amount_by_group" t-as="i">
+						 <span t-esc="i[3]"/>
+					  	</t>
+					</td>
+
+				</tr>
+				<tr>
+					<td class="center"><b>TOTAL</b></td>
+					<td class="center inside-tables"><b> <t t-esc="o.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(o.data_entry.total_oym_granja)"/></b></td>
+				</tr>
+			</table>
+		</template>
+
+		<!-- Segunda pagina: amortizacion de granja solar -->
+		<template id="amortizacion_granja">
+			<table>
+				<tr>
+					<th class="center product-table-header inside-tables" colspan="2"><b>AMORTIZACION DE GRANJA SOLAR</b></th>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Saldo Anterior</td>
+					<td class="center inside-tables"> $ <t t-esc="'{:,.2f}'.format(o.data_entry.saldo_anterior_amortizacion)"/> </td>
+				</tr>
+				<tr>
+					<td class="center inside-tables">Amortizacion</td>
+					<td class="center inside-tables"> $ <t t-esc="'{:,.2f}'.format(o.data_entry.amortizacion_dolares)"/></td>
+				</tr>
+				<tr>
+					<td class="center inside-tables"><b>Saldo Actual</b></td>
+					<td class="center inside-tables"> <b> $ <t t-esc="'{:,.2f}'.format(o.data_entry.saldo_actual_amortizacion)"/></b></td>
+				</tr>
+
+			</table>
+		</template>
+
+		<!-- Segunda pagina: formas de pago -->
+		<template id="formas_pago">
+			<table >
+				<tr>
+					<th class="center product-table-header inside-tables" colspan="4"><b>FORMAS DE PAGO</b></th>
+				</tr>
+				<tr>
+					<td class="center inside-tables" colspan="4">Deposito a cuenta</td>
+				</tr>
+				<tr>
+					<td class="center inside-tables" rowspan="2" colspan="4"><b t-esc="o.journal_id.name"/></td>
+				</tr>
+			</table>
+		</template>
+
+		<!-- Segunda pagina: indicadores ambientales -->
+		<template id="indicadores_ambientales">
+			<table style="margin-left:25px; margin-right:25px">
+				<tr>
+					<th class="product-table-header inside-tables center" colspan="3" >INDICADORES AMBIENTALES</th>
+				</tr>
+				<tr >
+					<td colspan="3" class="inside-tables center">Durante el tiempo de funcionamiento de la Granja Solar se ha evitado que sean emitidas &amp;nbsp;<b><t t-esc="'{:.2f}'.format(o.data_entry.indicador_ambiental)"/> </b> Toneladas de CO2 al ambiente, lo que equivale a:</td>
+				</tr>
+				<tr style="background-color:#E2EFDA">
+					<td width="33.33%" class="inside-tables center">manejar un vehiculo: <b t-esc="'{:.2f}'.format(o.data_entry.kilometros)"/> Kilometros</td>
+					<td width="33.33%" class="inside-tables center">CO2 que puede absorberse por: <b t-esc="'{:.2f}'.format(o.data_entry.co2_arbol)" /> arboles</td>
+					<td width="33.33%" class="inside-tables center">Agua para generar Energia electrica: <b t-esc="'{:.2f}'.format(o.data_entry.galones_agua)"/> Galones</td>
+				</tr>
+				<tr height="40px">
+					<td colspan="2" style="font-size:8px; vertical-align : bottom; text-align: left;" >
+						Rango: <t t-esc="o.min_number_shot"/>&amp;nbsp;al &amp;nbsp; <t t-esc="o.max_number_shot"/>
+					</td>
+					<td colspan="2" style="font-size:8px; vertical-align : bottom; text-align: right;" >
+						Fecha Límite de Emisión: <t t-esc="o.cai_expires_shot.strftime('%d/%m/%Y')"/>
+					</td>
+  				</tr>
+			</table>
+
+		</template>
+
+		<!-- template Final -->
+        <template id="report_factura_template">
+           <t t-call="web.basic_layout">
+			        <div class="page inside-tables">
+			            <style type="text/css">
+								.center{
+							text-align:center;
+							}
+							.pt-header{
+							border: 1px solid black;
+							}
+							.product-table-header{
+							border: 1px solid;
+							background-color: #a0c069;
+							}
+							.div-height{
+								height: 470px;
+								border: 1px solid black;
+							}
+							table{font-size:10px;}
+							.side-margins {
+								margin-left:25px;
+								margin-right:25px;
+								margin-top:20px;
+							}
+							.color-highlight{background-color: #b4b4b3;}
+							.color-highlight-totals{
+								border: 1px solid #737373;
+								background-color: #b4b4b3;
+							}
+							.inside-tables{
+							border: 1px solid;
+							border-color: #a0c069
+							}
+							body{
+								font-family: "Calibri";
+							}
+							td, th{
+								padding: 1px 5px!important;
+								font-family: sans serif;
+							}
+							.line_wrap{
+							white-space: nowrap;
+							width: 97%;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							margin-top: 0;
+							margin-bottom: 0;
+							padding-top: 0;
+							padding-bottom: 0;
+							}
+							.table-bordered-black th, .table-bordered-black td,
+							.table-bordered-black tbody th, .table-bordered-black tbody td,
+							.table-bordered-black thead th, .table-bordered-black thead td {
+							border: 1px solid black;
+							}
+							.small_bold{
+							font-size: 12px;
+							font-weight: bold;
+							}
+							.productTable th{
+							border-bottom: 3px solid #636e72;
+							margin:0px 0px;
+							padding:0
+							}
+							.productTable{
+							border-collapse: collapse;
+							margin-left: 10px;
+							margin-right: 15px;
+							border-bottom: 3px solid #636e72;
+							}
+							.productTable td{
+							padding-top: 100px;
+							}
+							.conditionsTable th{
+							width: 40%;
+							}
+
+						</style>
+                        <!-- Company logo and num Factura-->
+			            <t t-call="report_energia_solar.logo_num_factura"/>
+			            <br/>
+
+                        <!--Info empresa-->
+			            <t t-call="report_energia_solar.info_empresa"/>
+			            <br/>
+
+                        <!--Info Cliente-->
+			            <t t-call="report_energia_solar.info_cliente"/>
+			            <br/>
+
+						<!--Tabla de pedido-->
+			            <t t-call="report_energia_solar.tabla_pedido"/>
+			            <br/>
+
+						<!--Totalizadores-->
+			            <t t-call="report_energia_solar.totalizadores"/>
+			            <br/>
+			        </div>
+
+					<br/>
+
+			   		<!-- Segunda Pagina -->
+					<div class="page inside-tables">
+						<!-- Company logo and num Factura-->
+						<t t-call="report_energia_solar.reporte_logo"/>
+						<br/>
+						 <!-- Resumen empresa y cliente -->
+			            <t t-call="report_energia_solar.resumen_empresa_cliente"/>
+			            <br/>
+						<!-- Resumen Datos -->
+			            <t t-call="report_energia_solar.resumen_datos"/>
+			            <br/>
+
+						<div>
+							<!--Tabla lateral de imagenes -->
+							<table width="40%" align="left" style="display:inline-block;">
+								<tr width="100%">
+									<td>
+										<!-- Resumen Pagos Previos -->
+										<t t-call="report_energia_solar.resumen_pagos_previos"/>
+									</td>
+								</tr>
+								<tr width="100%">
+									<td>
+										<!-- Resumen Cargos del Periodo -->
+										<t t-call="report_energia_solar.resumen_cargos_periodo"/>
+									</td>
+								</tr>
+								<tr width="100%">
+									<td>
+										<!-- Resumen Creditos o debitos -->
+			            				<t t-call="report_energia_solar.resumen_credtos_debitos"/>
+									</td>
+								</tr>
+								<tr width="100%">
+									<td>
+										<!-- Resumen total cargos -->
+			            				<t t-call="report_energia_solar.total_cargos"/>
+									</td>
+								</tr>
+							</table>
+							<!--Tabla de imagenes -->
+							<table align="left" width="50%" style="display:inline-block">
+								<tr>
+									<td>
+										<!-- historico img -->
+										<t t-if="o.historicos_en_kwh">
+										  <img t-att-src="image_data_uri(o.historicos_en_kwh)" alt="historicos_en_kwh" style="max-width: 350px; margin-bottom:10px; margin-left:45px;"/>
+										</t>
+										<t t-else="">
+										  <p style="height:225px;"></p>
+										</t>
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+								</tr>
+								<tr>
+									<td>
+										<!-- promedio generacion anual img -->
+										<t t-if="o.promedio_generacion_anual">
+										  <img  t-att-src="image_data_uri(o.promedio_generacion_anual)" alt="promedio_generacion_anual" style="max-width: 350px; margin-bottom:10px; margin-left:45px;"/>
+										</t>
+										<t t-else="">
+										  <p style="height:225px;"></p>
+										</t>
+									</td>
+								</tr>
+							</table>
+						</div>
+
+						<!-- Serie de tablas verticales -->
+						<table width="100%" align="left" style="margin-bottom:10px;">
+							<tr>
+								<td>
+									<t t-call="report_energia_solar.desglose_factura"/>
+								</td>
+								<td>
+									<t t-call="report_energia_solar.amortizacion_granja"/>
+								</td>
+								<td>
+									<t t-call="report_energia_solar.formas_pago"/>
+								</td>
+							</tr>
+						</table>
+						<t t-call="report_energia_solar.indicadores_ambientales"/>
+					</div>
+		       </t>
+        </template>
+    </data>
+</odoo>
