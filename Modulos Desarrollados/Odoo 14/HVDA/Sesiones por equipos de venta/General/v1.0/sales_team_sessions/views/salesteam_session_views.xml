@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View Sales Team Session -->
+    <record id="view_salesteam_session_form" model="ir.ui.view">
+        <field name="name">salesteam.session.form.view</field>
+        <field name="model">salesteam.session</field>
+        <field name="arch" type="xml">
+            <form string="Sesiones de venta por equipo" create="0">
+                <!-- Estados de la sesion de ventas-->
+                <header>
+                    <button name="open_cashbox_salesteam" type="object" string="Abrir Sesión"
+                        states="opening_control"
+                        context="{'balance': 'start'}"/>
+                    <button id="end_session_opened" name="action_salesteam_session_closing_control" type="object" string="Finalizar Sesión"
+                        states="opened"
+                        class="oe_highlight"/>
+                    <button id="validate_closing_control" name="action_salesteam_session_validate" type="object" string="Cerrar Cerrada &amp; Publicar Entradas" states="closing_control"
+                        class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="opened,closing_control,closed" nolabel="1" />
+                    <field name="cash_control" invisible="1"/>
+                </header>
+                <sheet>
+                    <field name="cash_register_id" invisible="1"/>
+                    <field name="failed_pickings" invisible="1"/>
+                    <field name="rescue" invisible="1"/>
+                    <!-- Botones Inteligentes -->
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Ordenes de venta de la sesion de ventas -->
+                        <button name="action_view_order"
+                            class="oe_stat_button"
+                            icon="fa-shopping-basket"
+                            type="object">
+                            <field name="order_count" widget="statinfo" string="Ordenes"/>
+                        </button>
+                        <!-- Pagos de las ordenes de la sesion de ventas -->
+                       <button
+                            name="action_show_payments_list"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-dollar"
+                            >
+                            <field name="total_payments_amount" widget="statinfo" string="Pagos"/>
+                        </button>
+                        <button
+                            name="show_journal_items"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-bars"
+                            string="Movimientos contables"
+                            attrs="{'invisible':[('move_id', '=', False)]}"
+                            groups="account.group_account_readonly"
+                            >
+                        </button>
+                    </div>
+                    <h1 class="oe_title">
+                        <p>Sesión de Venta 
+                        <field name="name" attrs="{'invisible': [('name','=','/')]}" class="oe_inline"/></p>
+                    </h1>
+                    <group>
+                        <field name="cash_control" invisible="1" />
+                        <field name="user_id"/>
+                        <!-- Configuración de la sesion -->
+                        <field name="config_id" invisible="1"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="crm_team_id"/>
+                        <field name="move_id" readonly="1" groups="account.group_account_readonly" />
+                        <field name="start_at" attrs="{'invisible' : [('state', '=', 'opening_control')]}"/>
+                        <field name="stop_at" attrs="{'invisible' : [('state', '!=', 'closed')]}"/>
+                    </group>
+                    <notebook>
+                        <page string="Control de efectivo" name="cash_control" attrs="{'invisible' : [('cash_control', '=', False)]}">
+                            <group class="col-md-12" style="margin-left: 140px;">
+                                <group class="col-md-7">
+                                    <div style="margin:0;padding:0;">
+                                        <group style="margin:0;padding:0;" attrs="{'invisible' : [('state', 'in', ['opening_control', 'closed'])]}">
+                                            <field style="text-align:right;margin:0;padding:0;" name="cash_register_total_entry_encoding" widget="monetary" options="{'currency_field': 'currency_id'}" string="+ Transacciones"/>
+                                        </group>
+                                        <group style="margin:0;padding:0;" attrs="{'invisible' : [('state', '!=', 'closed')]}">
+                                            <field style="text-align:right;margin:0;padding:0;" name="cash_real_transaction" widget="monetary" options="{'currency_field': 'currency_id'}" string="+ Transacciones"/>
+                                        </group>
+                                        <group style="margin:0;padding:0;" attrs="{'invisible' : [('state', 'in', ['opening_control', 'closed'])]}">
+                                            <field style="text-align:right;margin:0;padding:0;" name="cash_register_balance_end" widget="monetary" options="{'currency_field': 'currency_id'}" string="= Efectivo esperado"/>
+                                        </group>
+                                        <group style="margin:0;padding:0;" attrs="{'invisible' : [('state', '!=', 'closed')]}">
+                                            <field style="text-align:right;margin:0;padding:0;" name="cash_real_expected" widget="monetary" options="{'currency_field': 'currency_id'}" string="= Esperado"/>
+                                        </group>
+                                        <group style="margin:0;padding:0;" attrs="{'invisible' : [('state', 'in', ['opening_control'])]}">
+                                            <field style="text-align:right;margin:0;padding:0;" name="cash_register_balance_end_real" widget="monetary" options="{'currency_field': 'currency_id'}" string="Efectivo Actual"/>
+                                        </group>
+                                    </div>
+                                    <div style="margin:0;padding:0;">
+                                        <group style="margin:0;padding:0;" attrs="{'invisible' : [('state', 'in', ['opening_control'])]}">
+                                            <group style="margin:0;padding:0;" attrs="{'invisible' : [('current_user', '=', False)]}">
+                                                <button class="oe_inline oe_link" name="%(action_salesteam_box_out)d" type="action" attrs="{'invisible' : [('state', '=', 'closed')]}">Retirara | Depositar Efectivo</button>
+                                                <field name="current_user" invisible="1"/>
+                                            </group>
+                                        </group>
+                                        <group style="margin:0;padding:0;" attrs="{'invisible' : [('state', '!=', 'closing_control')]}">
+                                            <group style="margin:0;padding:0;" attrs="{'invisible' : [('current_user', '=', False)]}">
+                                                <button class="oe_inline oe_link" name="open_cashbox_salesteam" type="object" attrs="{'invisible': [('current_user', '=', False), ('state', '!=', 'closing_control')]}" context="{'balance': 'close'}">Establecer cierre de caja</button>
+                                                <field name="current_user" invisible="1"/>
+                                            </group>
+                                        </group>
+                                    </div>
+                                </group>
+                            </group>
+
+                            <div class="col-md-4" attrs="{'invisible' : [('state', '!=', 'closing_control')]}" style="height: 30px">
+                                <group class="oe_subtotal_footer">
+                                    <field name="cash_register_difference" widget="monetary" options="{'currency_field': 'currency_id'}" decoration-danger="cash_register_difference != 0"/>
+                                </group>
+                            </div>
+                            <div class="col-md-4" attrs="{'invisible' : [('state', '!=', 'closed')]}" style="height: 30px">
+                                <group class="oe_subtotal_footer">
+                                    <field name="cash_real_difference" widget="monetary" options="{'currency_field': 'currency_id'}" decoration-danger="cash_real_difference != 0"/>
+                                </group>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Tree View Sales Team Session
+        Campos necesarios para la vista: 
+            - name
+            - config_id
+            - user_id
+            - start_at 
+            - stop_at
+            - state
+
+        Estado necesarios para la vista: 
+            - opening_control
+            
+    -->
+    <record id="view_sales_team_session_tree" model="ir.ui.view">
+        <field name="name">salesteam.session.tree.view</field>
+        <field name="model">salesteam.session</field>
+        <field name="arch" type="xml">
+            <tree string="Sesiones de equipos de venta" create="0" sample="1">
+                <field name="name" decoration-bf="1" string="ID Sesión"/>
+                <field name="crm_team_id" string="Equipo de venta"/>
+                <field name="user_id" widget="many2one_avatar_user" string="Abierto por"/>
+                <field name="start_at" string="Fecha de apertura"/>
+                <field name="stop_at" string="Fecha de cierre"/>
+                <field name="state" widget="badge" decoration-info="state in ('opening_control')" decoration-success="state in ('opened', 'closed')" decoration-warning="state == 'closing_control'" string="Estado"/>
+                <field name="cash_register_balance_start" string="Efectivo al Iniciar" invisible="0"/>
+                <field name="cash_register_balance_end" string="Efectivo al Cerrar" invisible="1"/>
+                <field name="total_payments_amount" string="Total Facturado"/>
+            </tree>
+        </field>
+    </record>
+    
+
+    <!-- Kanban View Sales Team Session 
+        Campos necesarios para la vista: 
+            - name
+            - config_id
+            - user_id
+            - start_at 
+            - stop_at
+            - state
+
+        Estados necesarios para la vista: 
+            - opening_control
+            - closing_control
+    -->
+    <record model="ir.ui.view" id="view_sales_team_session_kanban">
+        <field name="name">salesteam.session.kanban</field>
+        <field name="model">salesteam.session</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" create="0" sample="1">
+                <field name="crm_team_id" />
+                <field name="name" />
+                <field name="user_id" />
+                <field name="start_at" />
+                <field name="state" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title"><span><field name="crm_team_id"/></span></strong>
+                                </div>
+                                <field name="state" widget="label_selection" options="{'classes': {'opening_control': 'default',
+                                        'opened': 'success', 'closing_control': 'warning', 'closed': 'warning'}}"/>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <field name="name" />
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <span><field name="start_at" /></span>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+
+    <!-- Search View Sales Team Session 
+        Campos necesarios para la vista: 
+            - name
+            - config_id
+            - user_id
+            - my_sessions 
+            - open_sessions
+            - start_at 
+            - stop_at
+            - state
+    -->
+    <record id="view_sales_team_session_search" model="ir.ui.view">
+        <field name="name">salesteam.session.view</field>
+        <field name="model">salesteam.session</field>
+        <field name="arch" type="xml">
+            <search string="Sesiones de equipos de venta">
+                <field name="name"/>
+                <field name="config_id" />
+                <field name="user_id" />
+                <filter name="open_sessions" string="En Progreso" domain="[('state', '=', 'opened')]"/>
+                <separator/>
+                <filter string="Fecha de apertura" name="start_date" date="start_at" />
+                <group expand="0" string="Agrupado por">
+                    <filter string="Ordenado por" name="user" domain="[]" context="{'group_by' : 'user_id'}"/>
+                    <filter string="Equipo de venta" name="crm_team_id" domain="[]" context="{'group_by': 'config_id'}"/>
+                    <filter string="Estado" name="status" domain="[]" context="{'group_by': 'state'}"/>
+                    <filter string="Fecha de apertura" name="opening_date" domain="[]" context="{'group_by': 'start_at'}"/>
+                    <filter string="Fecha de cierre" name="closing_date" domain="[]" context="{'group_by': 'stop_at'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Acción del MenuItem Sesiones de Venta -->
+    <record id="action_sales_team_session" model="ir.actions.act_window">
+        <field name="name">Sesiones de Venta</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">salesteam.session</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="groups_id" eval="[(4,ref('sales_team_sessions.group_admin_session')),(4,ref('sales_team_sessions.group_employee_session'))]"/>
+        <field name="search_view_id" ref="view_sales_team_session_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No hay sesiones de venta
+            </p><p>
+                Una sesión de venta es un periodo de tiempo, usualmente un día, en el que se realizan ventas de productos o servicios por equipo de ventas
+            </p>
+        </field>
+    </record>
+
+    <!-- MenuItem Sesiones de Venta -->
+    <menuitem
+        id="menu_sales_team_session_all"
+        name="Sesiones de Venta"
+        parent="sale.sale_order_menu"
+        action="action_sales_team_session"
+        sequence="2"
+        groups="sales_team_sessions.group_employee_session,sales_team_sessions.group_admin_session"
+        />
+        
+    <!-- Acción del MenuItem Sesiones de Venta -->
+    <record id="action_sales_team_session_form" model="ir.actions.act_window">
+        <field name="name">action.sales.team.session.form</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">salesteam.session</field>
+        <field name="view_mode">form</field>
+        <field name="groups_id" eval="[(4,ref('sales_team_sessions.group_admin_session')),(4,ref('sales_team_sessions.group_employee_session'))]"/>
+        <field name="search_view_id" ref="view_sales_team_session_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No hay sesiones de venta
+            </p><p>
+                Una sesión de venta es un periodo de tiempo, usualmente un día, en el que se realizan ventas de productos o servicios por equipo de ventas
+            </p>
+        </field>
+    </record>
+
+
+    <!-- Confirmar cierre de caja para la sesión de ventas del equipo de ventas -->
+
+    <record model="ir.ui.view" id="closing_balance_confirm">
+        <field name="name">Confirming balance closing</field>
+        <field name="model">closing.balance.confirm.wizard.salesteam</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <span>Hay una diferencia entre el efectivo esperado y el efectivo actual, corrijalo antes de realizar el cierre de sesión</span>
+                </group>
+                <footer>
+                    <!--<button name="confirm_closing_balance" string="Confirm" type="object" class="oe_highlight, btn-primary" />-->
+                    <button string="Salir" special="cancel" class="oe_highlight, btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

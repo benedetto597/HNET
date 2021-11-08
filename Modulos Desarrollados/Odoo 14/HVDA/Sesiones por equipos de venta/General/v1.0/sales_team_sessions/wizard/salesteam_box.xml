@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="cash_box_out_form">
+            <field name="model">cash.box.out.salesteam</field>
+            <field name="arch" type="xml">
+                <form string="Retirar/Ingresara Efectivo">
+                    <separator string="Describe why you put/take money from the cash register:"/>
+                    <group>
+                        <field name="name" class="oe_inline" required="1"/>
+                        <field name="amount" class="oe_inline" required="1"/>
+                        <field name="is_in_or_out" widget="radio" class="oe_inline" required="1"/>
+                    </group>
+
+                    <footer>
+                        <button name="run" string="Retirar/Ingresara Efectivo" type="object" class="btn-primary"/>
+                        <button class="btn-secondary" special="cancel" string="Cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_salesteam_box_out" model="ir.actions.act_window">
+            <field name="name">Retirar/Ingresara Efectivo</field>
+            <field name="res_model">cash.box.out.salesteam</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

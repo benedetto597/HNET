@@ -1,0 +1,14 @@
+<odoo>
+  <data>
+   <record id="project_project_btn_inherit" model="ir.ui.view">
+        <field name="name">project.project.btn.inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button string="Entregado vs Presupuestado" class="oe_stat_button" name="open_stock_moves" type="object" icon="fa-dollar"/>
+            </xpath>
+        </field>
+    </record>
+  </data>
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template xml:space="preserve">
+    <t t-extend="SubmitOrderButton">
+      <t t-jquery=".order-submit" t-operation="replace">
+         <span class="control-button order-submit">
+            <i class="fa fa-cutlery"></i>
+             Ingresar
+         </span>
+      </t>
+    </t>
+</template>

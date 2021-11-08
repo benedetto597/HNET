@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_razon_desviacion,access_razon_desviacion,model_razon_desviacion,,1,1,1,1
+access_resumen_transferencias,access_resumen_transferencias,model_resumen_transferencias,,1,1,1,1
+

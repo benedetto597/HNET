@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cashbox -->
+    <record id="account_cashbox_line_view_tree" model="ir.ui.view">
+        <field name="name">account.cashbox.line.tree</field>
+        <field name="model">account.cashbox.line</field>
+        <field name="arch" type="xml">
+            <tree string="Balance de caja registradora" editable="top">
+                <field name="coin_value"/>
+                <field name="number"/>
+                <field name="subtotal"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="account_cashbox_line_action" model="ir.actions.act_window">
+        <field name="name">Valores de Apertura/Cierre</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.cashbox.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="account_cashbox_line_view_tree"/>
+    </record>
+    
+    <record id="view_bank_statement_pos_session" model="ir.ui.view">
+        <field name="name">view.bank.statement.pos.session</field>
+        <field name="model">account.bank.statement</field>
+        <field name="mode">primary</field>
+        <field name="priority">1000</field>
+        <field name="inherit_id" ref="account.view_bank_statement_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_validate_or_action']" position="replace"/>
+        </field>
+    </record>
+
+    <record id="view_account_bnk_stmt_cashbox" model="ir.ui.view">
+        <field name="name">account.bnk_stmt_cashbox.form</field>
+        <field name="model">account.bank.statement.cashbox</field>
+        <field name="inherit_id" ref="account.view_account_bnk_stmt_cashbox"/>
+        <field name="arch" type="xml">
+          <xpath expr="//sheet" position="inside">
+              <field name="is_a_template" invisible="1"/>
+          </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_bnk_stmt_cashbox_footer" model="ir.ui.view">
+      <field name="name">account.bnk_stmt_cashbox.form.close.modal</field>
+      <field name="model">account.bank.statement.cashbox</field>
+      <field name="inherit_id" ref="account.view_account_bnk_stmt_cashbox_footer"/>
+      <field name="mode">primary</field>
+      <field name="priority">1000</field>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='cashbox_lines_ids']" position="before">
+              <button name="set_default_cashbox_salesteam" type="object" string="Establecer inicio de caja predeterminado" invisible="1" />
+          </xpath>
+      </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="lower_bar_template" xml:space="preserve">
+
+  <t t-extend="ProductScreenWidget">
+        <t t-jquery="table.layout-table" t-operation="append">
+          <tr class="content-row" style="background-color:#393939; ">
+              <td class="content-cell">
+                <div class="content-container">
+                    <div align="left">
+                        <span class="order-button square show-pedidos">
+                        <i class="fa fa-bars" aria-hidden="true"/>
+                        Pedidos en Cocina
+                         </span>
+                   </div>
+                </div>
+            </td>
+            </tr>
+        </t>
+    </t>
+
+    <!--Para visualizar todos los pedidos de cocina -->
+    <t t-name="KitchenWidget">
+      <div class="orders-list-screen clientlist-screen screen">
+        <div class="screen-content">
+           <section class="top-content">
+            <span class='button back'>
+             <i class='fa fa-angle-double-left'/>
+                Regresar
+            </span>
+            <span class="filters">
+                <i class='fa fa-filter'></i>
+                  Estado 
+                
+                <span class="button cocina-filter">
+                  Cocina
+                </span>
+
+                <span class="button facturacion-filter">
+                  Facturacion
+                </span>
+
+                <span class="button despachado-filter">
+                  Despachado
+                </span>
+            </span>
+
+          </section>
+
+              <section class="full-content">
+                <div class='window'>
+                  <section class='subwindow collapsed'>
+                     <div class='subwindow-container collapsed'>
+                       <div class='subwindow-container-fix order-details-contents'>
+
+                       </div>
+                     </div>
+                  </section>
+                  <section class='subwindow'>
+
+                    <div class='subwindow-container'>
+                      <div class='subwindow-container-fix touch-scrollable scrollable-y'>
+                        <table class='client-list'>
+                            <caption id='titulo-filtro'></caption>
+                         <thead>
+                           <tr>
+                             <th>Referencia</th>
+                             <th>Origen</th>
+                             <th>Cliente</th>
+                             <th>Hora</th>
+                             <th>Accion</th>
+                           </tr>
+                         </thead>
+                         <tbody class='show-order-list-lines'>
+                         </tbody>
+                      </table>
+                      </div>
+                    </div>
+                 </section>
+                </div>
+            </section>
+          </div>
+       </div>
+    </t>
+
+    <!--Para cargar cada linea de de los pedidos disponibles-->
+    <t t-name="KitchenOrderLines">
+    <tr class='order-line' t-att-data-id='rec.referencia'>
+        <td><t t-esc='rec.referencia' /></td>
+        <td><t t-esc='rec.origen' /></td>
+        <td><t t-esc='rec.cliente' /></td>
+        <td><t t-esc='rec.hora_pedido' /></td>
+        <td><button class="repeat-button repeat_order">Mostrar pedido</button></td>
+    </tr>
+    </t>
+
+     <!-- Cargar los la info de los pedidos de cocina -->
+    <t t-name="PopupDeliveriesWidget">
+        <div class="modal-dialog" role="dialog">
+            <div class="popup popup-selection ">
+                <p class="title">Deliveries</p>
+
+                <div class='selection scrollable-y touch-scrollable'>
+
+                     <table text-align = "center" width="100%" id="tabla-deliveries">
+
+                    </table>
+                </div>
+
+                <div class="footer">
+                    <div class="button confirm">
+                        Cliente
+                        </div>
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="PopupDeliveriesLinesWidget">
+         <tr>
+            <td>
+                <div class="control-button delivery" t-att-id="team_name.id" style="width: 80%; height: 100%; margin-top: 15px;">
+                     <span t-att-id="team_name.id"><t t-esc="team_name.name"/></span>
+                </div>
+            </td>
+        </tr>
+    </t>
+
+</templates>
+
+

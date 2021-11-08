@@ -1,0 +1,95 @@
+<odoo>
+    <data>
+
+        <!-- Note page with table entry data -->
+        <record id="enee_form" model="ir.ui.view">
+        <field name="name">datos.enee.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/notebook/page[@id='invoice_tab']" position="after">
+                <!--<page name="enee_tabs" string="Datos Factura ENEE" attrs="{'invisible': ['|',('invoice_origin','=',False),'!',('invoice_origin','ilike','SUB')]}"> -->
+                <page name="enee_tabs" string="Datos Factura ENEE">
+                    <group>
+                        <label for="data_entry" string="Tabla de Entrada"/>
+                        <field name="data_entry"  readonly="1"/>
+
+                          <group string="Fecha de lecturas ENEE">
+                            <field name="f_lectura_actual"/>
+                            <field name="f_lectura_anterior"/>
+                        </group>
+
+                        <group string="Totales ENEE">
+                            <field name="total_lps_enee"/>
+                            <field name="total_kwh_enee"/>
+                            <field name="saldo_anterior_amortizacion"/>
+                        </group>
+
+                         <group string="Lecturas ENEE">
+                            <field name="lectura_actual"/>
+                            <field name="lectura_anterior"/>
+                        </group>
+                        <group string="Otros Valores">
+
+                            <field name="kwh_excendentes"/>
+                            <field name="tasa_cambio"/>
+
+                        </group>
+
+                        <group>
+                            <field name="historicos_en_kwh" widget='image' class="oe_avatar"/>
+                        </group>
+
+                        <group>
+                            <field name="promedio_generacion_anual" widget='image' class="oe_avatar"/>
+                        </group>
+
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+      <!-- table entry button -->
+        <record id="table_entry_inherit_btn" model="ir.ui.view">
+            <field name="name">account.move.inherit.button</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/header/button[@name='action_invoice_register_payment']" position="after">
+                   <button name="load_enee_transient" string="Cargar Data" type="object" attrs="{'invisible': ['|','|',('invoice_origin','=',False),'!',('invoice_origin','ilike','SUB'), ('data_entry','!=',False)]}" class="oe_highlight"/>
+                   <button name="btn_generar_graficos" string="Generar Graficas" type="object" attrs="{'invisible': ['|',('data_entry','=',False), ('historicos_en_kwh','!=',False)]}"/>
+                </xpath>
+            </field>
+
+        </record>
+
+    <record id="heredar_res_partner_form" model="ir.ui.view">
+        <field name="name">heredar.res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                 <field name="porcentaje_ahorro"/>
+                 <field name="tipo_cliente"/>
+                 <field name="codigo_cliente"/>
+                 <field name="region_cliente"/>
+                <field name="tarifa_base1" attrs="{
+                 'required': [('tipo_cliente','in',['normal','equinsa'])],
+                 'invisible': [('tipo_cliente','not in',['normal','equinsa'])]
+                 }"/>
+                <field name="tarifa_base2" attrs="{
+                 'required': [('tipo_cliente','in',['especial','otro'])],
+                 'invisible': [('tipo_cliente','not in',['especial','otro'])]
+                 }"/>
+                <field name="tarifa_base3" attrs="{
+                 'required': [('tipo_cliente','in',['especial','otro'])],
+                 'invisible': [('tipo_cliente','not in',['especial','otro'])]
+                 }"/>
+
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>

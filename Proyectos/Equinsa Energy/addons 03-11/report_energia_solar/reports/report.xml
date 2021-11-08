@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+         <report
+            id="report_factura_energia_solar"
+            model="account.move"
+            string="Factura Energia Solar"
+            report_type="qweb-pdf"
+            name="report_energia_solar.report_factura"
+            file="report_energia_solar.report_factura"
+            />
+
+    <record id="paperformat_energia_solar" model="report.paperformat">
+        <field name="name">Formato Energia Solar</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">27</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="report_energia_solar.report_factura_energia_solar" model="ir.actions.report">
+        <field name="paperformat_id" ref="report_energia_solar.paperformat_energia_solar" />
+    </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="close_order_form_view" model="ir.ui.view">
+      <field name="name">close.order.form.view</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//form" position="attributes">
+          <attribute name="hide_edit">can_edit == 'yes'</attribute>
+        </xpath>
+        <xpath expr="//button[@name='action_quotation_send']" position="after">
+          <!-- Agregar el botón "Dar de Alta" -->
+          <button name="close_order" type="object" class="btn-primary" string="Dar de Alta"
+            groups="account.group_account_user" attrs="{'invisible':[('pricelist_id', '=', 1), ('order_close', '=', True)]}"/>
+        </xpath>
+        <field name="partner_id" position="after">
+          <field name="can_edit" invisible="1"/>
+        </field>
+      </field>
+  </record>
+</odoo>

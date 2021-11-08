@@ -1,0 +1,32 @@
+<odoo>
+  <data>
+    <record id="view_resumen_transferencias_default_tree" model="ir.ui.view">
+            <field name="name">resumen.transferencias.tree</field>
+            <field name="model">resumen.transferencias</field>
+            <field name="arch" type="xml">
+                <tree string="Resumen Transferencias" editable="bottom">
+                    <field name="product_id"/>
+                    <field name="cantidad" readonly="1"/>
+                    <field name="costo" readonly="1"/>
+                    <field name="valor_presupuestado"/>
+                    <field name="done"/>
+                    <field name="costo_real"/>
+                    <field name="valor_real"/>
+                    <field name="desviacion_coste" />
+                    <field name="desviacion_cantidad"/>
+                    <field name="desviacion_economica"/>
+                    <field name="razon_desviacion_id"/>
+                </tree>
+            </field>
+        </record>
+
+      <record id="resumen_action" model="ir.actions.act_window">
+        <field name="name">Costos Previstos vs Entregados</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">resumen.transferencias</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_resumen_transferencias_default_tree"/>
+        <field name="domain"></field>
+    </record>
+  </data>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <template xml:space="preserve">
+    <t t-extend="KanbanView.buttons">
+      <t t-jquery="button" t-operation="before">
+        <!--
+        <button class="btn btn-primary estemen" type="button" accesskey="f">NEWBTN</button>
+        -->
+      </t>
+    </t>
+  </template>

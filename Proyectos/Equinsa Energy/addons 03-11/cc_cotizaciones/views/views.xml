@@ -1,0 +1,66 @@
+<odoo>
+  <data>
+    <record id="cc_form_inherit" model="ir.ui.view">
+        <field name="name">cc.inherit.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <field name="margin" position="before">
+                <field name="admin_sum" widget="monetary" options="{'currency_field': 'currency_id'}" groups="cc_cotizaciones.ccv_group"/>
+                <field name="imp_sum" widget="monetary" options="{'currency_field': 'currency_id'}" groups="cc_cotizaciones.ccv_group"/>
+                <field name="incen_sum" widget="monetary" options="{'currency_field': 'currency_id'}" groups="cc_cotizaciones.ccv_group"/>
+                <field name="util_sum" widget="monetary" options="{'currency_field': 'currency_id'}" groups="cc_cotizaciones.ccv_group"/>
+                <field name="util_sum_percent" groups="cc_cotizaciones.ccv_group"/>
+            </field>
+        </field>
+    </record>
+
+     <record id="cc_order_form_inherit" model="ir.ui.view">
+        <field name="name">cc.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='order_lines']/field[@name='order_line']/form/group/group/field[@name='price_unit']" position="attributes">
+                <attribute name="attrs">{'readonly': [('parent.x_negocio', '!=', 'RT')]}</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='price_unit']"  position="attributes">
+                <attribute name="attrs">{'readonly': [('parent.x_negocio', '!=', 'RT')]}</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='order_lines']/field[@name='order_line']/form/group/group/field[@name='product_id']" position="after">
+                <field name="util" optional="hide" groups="cc_cotizaciones.ccv_group" />
+                <field name="util_temp" optional="hide"/>
+                <field name="margen_utilidad" optional="hide"/>
+                <field name="costo_directo" optional="hide" groups="cc_cotizaciones.ccv_group" />
+                <field name="g" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="g_percent" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="j" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="j_percent" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="m" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="m_percent" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="s" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="s_percent" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="pv_temp" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+            </xpath>
+
+            <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="util" optional="hide" groups="cc_cotizaciones.ccv_group" />
+                <field name="util_temp" optional="hide"/>
+                <field name="margen_utilidad" optional="hide"/>
+                <field name="costo_directo" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="g" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="g_percent" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="j" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="j_percent" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="m" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="m_percent" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="s" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="s_percent" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+                <field name="pv_temp" optional="hide" groups="cc_cotizaciones.ccv_group"/>
+            </xpath>
+        </field>
+    </record>
+  </data>
+</odoo>

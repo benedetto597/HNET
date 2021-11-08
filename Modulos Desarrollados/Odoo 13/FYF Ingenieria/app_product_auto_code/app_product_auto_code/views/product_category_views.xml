@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--目录list-->
+        <record id="app_product_category_list_view" model="ir.ui.view">
+            <field name="name">app.product.category.list</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_list_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='display_name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='display_name']" position="before">
+                    <field name="sequence" widget="handle"/>
+                    <field name="id"/>
+                    <field name="complete_name"/>
+                </xpath>
+                <xpath expr="//field[@name='display_name']" position="after">
+                    <field name="ref"/>
+                    <field name="type"/>
+                    <field name="sale_ok"/>
+                    <field name="purchase_ok"/>
+                    <!--<field name="rental"/>-->
+                    <field name="product_sequence_cur" context="{'default_code': 'product.product'}" invisible="1"/>
+                    <field name="product_sequence" context="{'default_code': 'product.product'}"/>
+                    <field name="sequence_prefix"/>
+                </xpath>
+            </field>
+        </record>
+        <!--目录Form-->
+        <record id="app_product_category_form_view" model="ir.ui.view">
+            <field name="name">app.product.category.form</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="ref"/>
+                    <field name="sequence"/>
+                </xpath>
+                <xpath expr="//group[@name='first']" position="after">
+                    <group string="Default value for product in this category">
+                        <group>
+                            <field name="type"/>
+                            <field name="product_sequence_cur" context="{'default_code': 'product.product'}"/>
+                            <div colspan="2" attrs="{'invisible': [('product_sequence_cur', '>', 0)]}">
+                                <ul>
+                                    <li>
+                                        If the Product Sequence of this category is not set above.
+                                    </li>
+                                    <li>
+                                        The parent category's Product Sequence would be use.
+                                    </li>
+                                    <b><field name="product_sequence" nolabel="1"/></b>
+                                </ul>
+                            </div>
+                            <field name="tracking"/>
+                        </group>
+                        <group>
+                            <field name="sale_ok"/>
+                            <field name="purchase_ok"/>
+                            <!--<field name="rental"/>-->
+                            <field name="barcode_auto"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <!--搜索Form-->
+        <record id="product_category_search_view_auto_code" model="ir.ui.view">
+            <field name="name">product.category.search.internal_type</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="ref"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

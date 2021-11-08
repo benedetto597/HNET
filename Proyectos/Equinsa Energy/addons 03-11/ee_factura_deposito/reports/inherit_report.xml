@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="report_tabla_pedido_inherit" inherit_id="report_energia_solar.tabla_pedido">
+            <xpath expr="//div[@width='94%']" position="replace">
+                <div width="94%" t-att-class="'side-margins' if line_count &lt; 20 else 'here div-height2 side-margins'" style="margin-bottom:0px">
+				<table class="div-height" width="100%">
+  				<thead>
+  					<tr class="product-table-header center">
+  					<th class="pt-header" style="vertical-align : middle; width:8%">CANTIDAD</th>
+  					<th class="pt-header" style="vertical-align : middle; width:41%">NOMBRE</th>
+  					<th class="pt-header" style="width:12%; vertical-align : middle;">PRECIO UNITARIO</th>
+  					<th class="pt-header" style="width:12%; vertical-align : middle;">Descuento y Rebajas Otorgadas</th>
+  					<th class="pt-header" style="vertical-align : middle; width:12%">TOTAL</th>
+  				</tr>
+  				</thead>
+
+	    	<tbody>
+        	<t t-set="current_subtotal" t-value="0"/>
+
+        	<t t-if="o.invoice_origin">
+        	  <t t-set="invoice_sale_order" t-value="request.env['sale.order'].search([('name', '=', o.invoice_origin)])"/>
+        	</t>
+
+        	 <t t-if="invoice_sale_order and invoice_sale_order.sale_order_template_id">     
+                   <t t-set="sale_order_template_id" t-value="True"/>
+        	 </t>
+                 <t t-else="">
+                    <t t-set="sale_order_template_id" t-value="False"/>
+                 </t>
+
+
+        	<t t-foreach="o.invoice_line_ids" t-as="lines_id">
+        		<t t-set="current_subtotal" t-value="current_subtotal + lines_id.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+            <t t-set="current_subtotal" t-value="current_subtotal + lines_id.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                <t t-if="sale_order_template_id">
+                  <t t-if="lines_id.display_type == 'line_section'">
+                      <t t-set="current_section" t-value="lines_id"/>
+                      <!-- <t t-set="current_subtotal" t-value="0"/> -->
+                  </t>
+ 
+                   <t t-if="lines_id.display_type == 'line_note'">
+                      <t t-set="current_section_note" t-value="lines_id"/>
+                  </t>
+
+
+            		  <t t-if="current_section and (lines_id_last or o.invoice_line_ids[lines_id_index+1].display_type == 'line_section')">
+                        <tr style="font-size:11px; vertical-align:bottom;" height="20px">
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                           <td name="td_section_line" align="left" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+                                    <span t-field="current_section.name"/>
+                            </td>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                            <td name="td_section_subtotal" align="center" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+                                <span t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                        <t t-if="current_section_note">
+                       <tr>
+          	              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+          	                <td name="td_note_line" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+          	                    <i t-field="current_section_note.name"/>
+          	                </td>
+          	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+          	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+          	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+      	                </tr>
+        	            </t>
+                    </t>
+
+                </t>
+                <t t-else="">
+
+            		<tr style="font-size:11px; vertical-align:bottom;" height="20px">
+        			    <t t-if="not lines_id.display_type">
+        			       	<td class="text-center" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        						<t t-esc="lines_id.quantity"/>
+        					</td>
+        					<td align="left" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        						<t t-esc="lines_id.name"/>
+        					</td>
+        					<td align="right" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        					  <span t-field="o.currency_id.symbol"/>
+        						<span t-field="lines_id.price_unit" class="pull-center ml8"/>
+        					</td>
+        					 <td align="right" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        					   <span t-field="o.currency_id.symbol"/>
+        						<span t-field="lines_id.discount" class="pull-center ml8"/>
+        					 </td>
+        					<td align="right" style="border-right:1px solid black; border-left:1px solid black; height:10px;border-top:none;border-bottom:none">
+        						<span t-field="lines_id.price_subtotal" class="pull-center ml8"/>
+        					</td>
+        				</t>
+        				<t t-if="lines_id.display_type == 'line_section'">
+        				          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td name="td_section_line" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+        	                    <span t-field="lines_id.name"/>
+        	                </td>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <t t-set="current_section" t-value="lines_id"/>
+        	                <t t-set="current_subtotal" t-value="0"/>
+        	            </t>
+
+        	            <t t-if="lines_id.display_type == 'line_note'">
+        	              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td name="td_note_line" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+        	                    <span t-field="lines_id.name"/>
+        	                </td>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	                <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+        	            </t>
+
+        	    	</tr>
+
+        	    	<t t-if="current_section and (lines_id_last or o.invoice_line_ids[lines_id_index+1].display_type == 'line_section')">
+                        <tr class="is-subtotal text-right">
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                          <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+                            <td name="td_section_subtotal" style="border-top:none; border-right:1px solid black; border-left:1px solid black;">
+                                <strong class="mr16">subtotal</strong>
+                                <span t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                    </t>
+
+                </t>
+
+
+        	</t>
+        	 <tr>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+              <td style="border-top:none; border-right:1px solid black; border-left:1px solid black;"/>
+          </tr>
+
+         </tbody>
+		  	</table>
+			</div>
+
+		  <div class="side-margins" style="margin-top:0px">
+		    <table align="right" width="100%">
+		      <tr>
+		        <td style="width:8%; border-top:none;"/>
+		        <td style="width:41%; border-top:none;"/>
+
+		        <td colspan="2" class="text-center" style="width:24%; border: 1px solid black; border-top:none; ">TOTAL</td>
+		        <td align="right" style="width:12%; border: 1px solid black; border-top:none;">
+		          <t t-esc="o.amount_untaxed" t-options="{'widget':'monetary', 'display_currency': o.currency_id}"/>
+	          </td>
+		      </tr>
+		    </table>
+		  </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

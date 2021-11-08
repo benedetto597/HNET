@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_pos_config_form">
+        <field name="name">pos.config.cai.form.view.inherit</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='accounting_section']" position="after">
+                <h2 name="cai">Configuración del número de facturación</h2>
+                <div class="row mt16 o_settings_container" id="facturacion_cai">
+                    <div class="col-8 col-lg-8 o_setting_box" modifiers="{}">
+                         <div class="o_setting_right_pane">
+                             <div>
+                                 <label for="nombre"/>
+                            </div>
+                             <div>
+                                <field name="nombre"/>
+                            </div>
+                            <div>
+                                 <label for="razon"/>
+                            </div>
+                             <div>
+                                <field name="razon"/>
+                            </div>
+                             <div>
+                                 <label for="rtn"/>
+                            </div>
+                             <div>
+                                <field name="rtn"/>
+                            </div>
+                             <div>
+                                 <label for="telefono"/>
+                            </div>
+                             <div>
+                                <field name="telefono"/>
+                            </div>
+                             <div>
+                                 <label for="correo"/>
+                            </div>
+                             <div>
+                                <field name="correo"/>
+                            </div>
+                             <div>
+                                 <label for="direccion"/>
+                            </div>
+                             <div>
+                                <field name="direccion"/>
+                            </div>
+                             <div>
+                                 <label for="cai"/>
+                            </div>
+                             <div>
+                                <field name="cai"/>
+                            </div>
+                             <div>
+                                 <label for="rango"/>
+                            </div>
+                             <div>
+                                <field name="rango"/>
+                            </div>
+                             <div>
+                                 <label for="rango_maximo"/>
+                            </div>
+                             <div>
+                                <field name="rango_maximo"/>
+                            </div>
+                              <div>
+                                 <label for="fecha_expiracion"/>
+                            </div>
+                             <div>
+                                <field name="fecha_expiracion"/>
+                            </div>
+
+                             <div>
+                                 <label for="pos_order_sequence_id"/>
+                            </div>
+                             <div>
+                                <field name="pos_order_sequence_id"/>
+                            </div>
+                              <div>
+                                 <label for="pos_order_sequence_prefix"/>
+                            </div>
+                             <div>
+                                <field name="pos_order_sequence_prefix"/>
+                            </div>
+                         </div>
+                     </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_pos_pos_form_extend" model="ir.ui.view">
+            <field name="name">view.pos.pos.form.extend</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+            <field name="arch" type="xml">
+                    <field name="amount_tax" position="after">
+                        <field name="tax_bf1"/>
+                        <field name="tax_bf2"/>
+                        <field name="tax_bf3"/>
+                        <field name="exento" attrs="{'invisible':[('exento', '=', '0.00')]}"/>
+                        <field name="tax_15" attrs="{'invisible':[('exento', '!=', '0.00')]}"/>
+                        <field name="tax_18" attrs="{'invisible':[('exento', '!=', '0.00')]}"/>
+
+                    </field>
+
+
+                     <field name="note" position="after">
+                        <label for="note1"/><br/>
+                        <field name="note1"/>
+                        <label for="note2"/><br/>
+                        <field name="note2"/>
+                        <label for="note3"/><br/>
+                        <field name="note3"/>
+                    </field>
+          </field>
+   </record>
+
+    <record id="view_pos_pos_tree_extend" model="ir.ui.view">
+            <field name="name">view.pos.pos.tree.extend</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+            <field name="arch" type="xml">
+                    <field name="session_id" position="after">
+                        <field name="facturacion"/>
+
+                    </field>
+          </field>
+   </record>
+
+
+</odoo>

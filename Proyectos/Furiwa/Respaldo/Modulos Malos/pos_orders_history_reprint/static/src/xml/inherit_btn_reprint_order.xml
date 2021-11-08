@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <template xml:space="preserve">
+    <t t-extend="ReprintButton">
+      <t t-jquery=".js_reprint" t-operation="replace">
+         <div class='control-button js_reprint'>
+            <i class="fa fa-retweet"></i> Reimprimir Prefactura
+        </div>
+      </t>
+    </t>
+  </template>

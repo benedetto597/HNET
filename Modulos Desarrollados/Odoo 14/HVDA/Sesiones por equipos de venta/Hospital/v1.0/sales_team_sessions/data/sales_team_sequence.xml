@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Equipo de venta como pantalla principal de ventas -->
+    <!-- Equipo de venta como 1era opción -->
+    <record id = "sale.report_sales_team" model = "ir.ui.menu" >
+        <field name = "sequence">1</field>
+    </record>
+    <!-- Sesiones de ventas como 2da opción -->
+
+    <!-- Presupuestos como 3era opción -->
+    <record id = "sale.menu_sale_quotations" model = "ir.ui.menu" >
+        <field name = "sequence">3</field>
+    </record>
+
+    <!-- Pedidos como 4ta opción -->
+    <record id = "sale.menu_sale_order" model = "ir.ui.menu" >
+        <field name = "sequence">4</field>
+    </record>
+
+    <!-- Clientes como 5ta opción -->
+    <record id = "sale.res_partner_menu" model = "ir.ui.menu" >
+        <field name = "sequence">5</field>
+    </record>
+
+    <!-- Incluir para la version del Hospital Vicente D'antoni 
+    <record id="sale.menu_sale_quotations" model="ir.ui.menu">
+        <field name="name">Hospitalización</field>
+    </record>
+    <record id="sale.menu_sale_order" model="ir.ui.menu">
+        <field name="name">Ventas</field>
+    </record>
+    -->
+</odoo>
+
+
+

@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+    <!-- sale.advance.payment.inv -->
+    <record id="sale_advance_payment_inv_inherit" model="ir.ui.view">
+        <field name="name">sale.advance.payment.inv.inherit</field>
+        <field name="model">sale.advance.payment.inv</field>
+        <field name="inherit_id" ref="sale.view_sale_advance_payment_inv"/>
+        <field name="arch" type="xml">
+            <field name="deposit_account_id" position="replace">
+                <field name="deposit_account_id" required="1" options="{'no_create': True}" class="oe_inline" attrs="{'invisible': [('advance_payment_method', 'not in', ('fixed', 'percentage'))]}" groups="account.group_account_manager"/>
+            </field>
+        </field>
+    </record>
+  </data>
+</odoo>

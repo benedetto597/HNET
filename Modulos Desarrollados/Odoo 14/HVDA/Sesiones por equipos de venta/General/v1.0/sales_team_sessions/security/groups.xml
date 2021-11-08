@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Categoria de Seguridad para el Modelo -->
+        <record model="ir.module.category" id="module_sales_team_sessions">
+            <field name="name">Sesiones de Equipos de Venta</field>
+            <field name="description">Sesiones de Equipos de Venta</field>
+            <field name="sequence">9</field>
+        </record>
+
+        <!-- Grupo para Empleados -->
+        <record id="group_employee_session" model="res.groups">
+            <field name="name">Personal de Sesiones de Venta</field>
+            <field name="category_id" ref="module_sales_team_sessions"/>
+        </record>
+
+        <!-- Grupo para Administradores -->
+        <record id="group_admin_session" model="res.groups">
+            <field name="name">Administrador de Sesiones de Venta</field>
+            <field name="category_id" ref="module_sales_team_sessions"/>
+        </record>
+
+        <!-- Reglas de seguridad o acceso -->
+        <!-- Regla para filtrar lo visualizado en 'Ventas/Sesiones de Venta' -->
+        <record model="ir.rule" id="sales_team_employee_session_rule">
+            <field name="name">Sesión de Ventas: Empleados</field>
+            <field name="model_id" ref="model_salesteam_session"/>
+            <field name="domain_force">[('crm_team_id', '=', user.sale_team_id.id)]</field>
+            <field name="groups" eval="[(4,ref('group_employee_session'))]"/>
+        </record>
+
+        <!-- Regla para que los empleados puedan crear asientos contables -->
+        <record id="sales_team_employee_session_bank_statement_rule" model="ir.rule">
+            <field name="name">Sesión de Ventas: Estados Bancarios Personal</field>
+            <field name="model_id" ref="account.model_account_bank_statement" />
+            <field name="groups" eval="[(4, ref('group_employee_session')), (4,ref('group_admin_session'))]"/>
+            <field name="domain_force">[('salesteam_session_id', '!=', False)]</field>
+        </record>
+        <record id="sales_team_employee_session_bank_statement_account_rule" model="ir.rule">
+            <field name="name">Sesión de Ventas: Estados Bancarios Contabilidad</field>
+            <field name="model_id" ref="account.model_account_bank_statement" />
+            <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+        </record>
+        <record id="sales_team_employee_session_bank_statement_line_rule" model="ir.rule">
+            <field name="name">Sesión de Ventas: Lineas de Estados Bancarios Contabilidad</field>
+            <field name="model_id" ref="account.model_account_bank_statement_line" />
+            <field name="groups" eval="[(4, ref('group_employee_session')), (4,ref('group_admin_session'))]"/>
+            <field name="domain_force">[('statement_id.salesteam_session_id', '!=', False)]</field>
+        </record>
+        <record id="sales_team_employee_session_bank_statement_line_account_rule" model="ir.rule">
+            <field name="name">Sesión de Ventas: Lineas Contables de Estados Bancarios Contabilidad</field>
+            <field name="model_id" ref="account.model_account_bank_statement_line" />
+            <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+        <record id="sales_team_employee_session_cashbox_line_accountant_rule" model="ir.rule">
+            <field name="name">Sesión de Ventas: Lineas Contables de la Caja Registradora</field>
+            <field name="model_id" ref="account.model_account_cashbox_line" />
+            <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+    </data>
+</odoo>
+

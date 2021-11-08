@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ap_cancelar_cotizacion_ap_cancelar_cotizacion,ap_cancelar_cotizacion.ap_cancelar_cotizacion,model_ap_cancelar_cotizacion_ap_cancelar_cotizacion,base.group_user,1,1,1,1

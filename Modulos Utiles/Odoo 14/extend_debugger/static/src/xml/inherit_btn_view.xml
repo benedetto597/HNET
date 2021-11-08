@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-extend="WebClient.DebugManager.Backend">
+        <t t-jquery="a[data-action='perform_js_tests']" t-operation="before">
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="mail.mail" data-name="Correo" class="dropdown-item">Técnico: Correo</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.mail_server"  data-name="Correo de Salida" class="dropdown-item">Técnico: Correo de salida</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.actions.server"  data-name="Acciones de Servidor" class="dropdown-item">Técnico: Acciones Servidor</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="base.automation"  data-name="Acciones Automáticas" class="dropdown-item">Técnico: Acciones Automáticas</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.sequence"  data-name="Secuencias" class="dropdown-item">Técnico: Secuencias</a>
+            <a role="menuitem" href="#" data-<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-extend="WebClient.DebugManager.Backend">
+        <t t-jquery="a[data-action='perform_js_tests']" t-operation="before">
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="mail.mail" data-name="Correo" class="dropdown-item">Técnico: Correo</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.mail_server"  data-name="Correo de Salida" class="dropdown-item">Técnico: Correo de salida</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.actions.server"  data-name="Acciones de Servidor" class="dropdown-item">Técnico: Acciones Servidor</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="base.automation"  data-name="Acciones Automáticas" class="dropdown-item">Técnico: Acciones Automáticas</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.sequence"  data-name="Secuencias" class="dropdown-item">Técnico: Secuencias</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.actions.report"  data-name="Informes" class="dropdown-item">Técnico: Informes</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.ui.menu"  data-name="Elementos de Menú" class="dropdown-item">Técnico: Elementos de Menú</a>
+            <div class="dropdown-divider" role="separator"/>
+            <a role="menuitem" href="#" data-action="get_model" class="dropdown-item">Ver Modelo</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.model"  data-name="Modelos" class="dropdown-item">Técnico: Modelos</a>
+            <a role="menuitem" href="#" data-action="get_action_menu" data-model="ir.ui.view"  data-name="Vistas" class="dropdown-item">Técnico: Vistas</a>
+            <div class="dropdown-divider" role="separator"/>
+        </t>
+    </t>
+</templates>

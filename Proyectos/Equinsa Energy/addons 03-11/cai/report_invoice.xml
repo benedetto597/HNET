@@ -1,0 +1,424 @@
+<odoo>
+    <data >
+        <!-- Main template -->
+        <template id="report_invoice_custom">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="cai.report_invoice_custom_document" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+        <!-- Main template -->
+        <template id="report_invoice_custom_copy">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="is_copy" t-value="1"/>
+                    <t t-call="cai.report_invoice_custom_document" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+        <!-- Translatable template -->
+        <template id="report_invoice_custom_document">
+           <t t-call="web.basic_layout">
+			        <div class="page" style="margin-top: 0px;position:relative">
+			            <style type="text/css">
+
+			                        body
+			                        {
+			                        font-family: "Calibri";
+			                        }
+			                        td, th
+			                        {
+			                        padding: 1px 5px!important;
+			                        font-family: sans serif;
+			                        }
+			                        .line_wrap{
+			                        white-space: nowrap;
+			                        width: 97%;
+			                        overflow: hidden;
+			                        text-overflow: ellipsis;
+			                        margin-top: 0;
+			                        margin-bottom: 0;
+			                        padding-top: 0;
+			                        padding-bottom: 0;
+			                        }
+			                        .table-bordered-black th, .table-bordered-black td,
+			                        .table-bordered-black tbody th, .table-bordered-black tbody td,
+			                        .table-bordered-black thead th, .table-bordered-black thead td {
+			                        border: 1px solid black;
+			                        }
+			                        .small_bold{
+			                        font-size: 12px;
+			                        font-weight: bold;
+			                        }
+			                        .productTable th{
+			                        border-bottom: 3px solid #636e72;
+			                        margin:0px 0px
+			                        padding:0
+			                        }
+			                        .productTable{
+			                        border-collapse: collapse;
+			                        margin-left: 10px;
+			                        margin-right: 15px;
+			                        border-bottom: 3px solid #636e72;
+			                        }
+			                        .productTable td{
+			                        padding-top: 100px;
+			                        }
+			                        .conditionsTable th{
+			                        widht: 40%;
+			                        }
+
+			                    </style>
+			            <div style="position:absolute;top:45%;opacity:0.1;z-index:999;width:100%;">
+			                <img t-att-src="image_data_uri(o.company_id.logo)" style="width:100%;max-width:350px;display:block;margin:0px auto;"/>
+			            </div>
+			            <table width="100%" class="body">
+			                <tr>
+			                    <td width="24%" align="left" style="vertical-align:top;position: relative;">
+			                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" class="float-left" alt="Logo" style="max-width: 200px;width: 200%;display:inline-block"/>
+			                    </td>
+			                    <td width="32%" align="left" style="text-left: right;vertical-align: top">
+			                        <t t-if="o.type != 'out_refund'">
+			                            <b style="font-size: 1.0em;" t-if="o.company_id.name">
+			                                <t t-esc="o.company_id.name"/>
+			                                <br/>
+			                            </b>
+			                            <t  t-if="o.company_id.vat">
+			                                <span style="font-size: 11px;">R.T.N.
+
+			                                    <t t-esc="o.company_id.vat"/>
+			                                </span>
+			                                <br/>
+			                            </t>
+			                        </t>
+			                        <p style="font-size: 11px;">
+			                            <t t-if="o.company_id.street">
+			                                <t t-esc="o.company_id.street"/></t>
+			                            <br/>
+			                            <t t-if="o.company_id.city">
+			                                <t t-esc="o.company_id.city"/> |
+			                                    </t>
+			                            <t t-if="o.company_id.country_id">
+			                                <t t-esc="o.company_id.country_id.name"/></t>
+			                            <br/>
+			                            <t t-if="o.company_id.phone">
+			                                <t t-esc="o.company_id.phone"/></t>
+			                            <t t-if="o.company_id.website">
+			                                <t t-esc="o.company_id.website"/></t>
+			                        </p>
+			                    </td>
+			                    <td style="width: 40%">
+			                        <table width="100%" align="right" style="margin-top: -3px;">
+			                            <tr>
+			                                <td style="font-size: 12px">
+			                                    <t t-if="o.state != 'draft'">
+			                                        <h4 t-attf-class="#{'note_de_credito' if o.type == 'out_refund' else ''}" style="margin-bottom: 3px;margin-top: 3px;font-weight: bold;">
+			                                            <t t-if="o.type == 'out_refund'">NOTA DE CREDITO</t>
+			                                            <t t-if="o.type != 'out_refund'">FACTURA</t>
+			                                        </h4>
+			                                        <h4>
+			                                        <span t-esc="o.name"/>
+			                                        </h4>
+			                                        <br/>
+			                                        <span>Fecha de Factura:
+
+			                                            <t t-esc="o.invoice_date" t-field-options="{&quot;format&quot;: &quot;d&quot;}"/>
+			                                        </span>
+			                                        <br/>
+			                                                  CAI:
+
+			                                        <t t-esc="o.cai_shot"/>
+			                                        <br/>
+			                                    </t>
+			                                    <t t-if="o.state == 'draft'">
+			                                        <br/>
+			                                        <h2 style="margin: 5px;padding:0">
+			                                            <t t-if="o.type == 'out_refund'">NOTA DE CREDITO</t>
+			                                            <t t-if="o.type != 'out_refund'">FACTURA</t>Borrador
+
+			                                        </h2>
+			                                        <br/>
+			                                    </t>
+			                                </td>
+			                            </tr>
+			                        </table>
+			                    </td>
+			                </tr>
+			            </table>
+			            <br/>
+			            <div style="font-size: 12px; padding: 0px 30px">
+			                <div style="with:100%;border-bottom: 1px solid #76858a; padding: 5px 0px 0px 5px; position: relative">
+			                    <b style="padding:0 10px 0 0">CLIENTE</b>
+			                    <br/>
+			                </div>
+			                <table style="width:100%">
+			                    <tr>
+			                        <td width="60%">
+			                            <b class="text-left">
+			                                <t t-esc="o.partner_id.name"/>
+			                            </b>
+			                        </td>
+			                        <td width="40%">
+			                            <span align="left">Referencia:  </span>
+			                             <t t-esc="o.ref"/>
+			                        </td>
+			                    </tr>
+			                    <tr>
+			                        <td width="60%">
+			                            <span class="text-left">R.T.N.
+			                                <t t-esc="o.partner_id.vat"/>
+			                            </span>
+			                        </td>
+
+			                    </tr>
+			                    <tr >
+			                        <td width="60%">
+			                            <t t-esc="o.partner_id.street"/>
+			                        </td>
+			                        <td width="40%">
+			                            <span align="left">Condiciones:</span>
+			                                <t t-esc="o.invoice_payment_term_id.name"/>
+			                        </td>
+			                    </tr>
+
+			                </table>
+			            </div>
+			            <br/><br/>
+			            <div style="position: relative; width:100%; padding:10 35px">
+			                <div t-if="is_copy" style="position:absolute;top:30%;opacity:1;z-index:1000;width:100%">
+			                    <p style="font-size:70px;text-align:center">Copia</p>
+			                </div>
+			                <div style="position:relative;">
+			                    <table class="productTable" height="120px">
+			                        <thead>
+			                            <tr style="font-size:12px" height="22px">
+			                                <th class="text-center" width="5%">
+			                                    <center>#</center>
+			                                </th>
+			                                <th class="text-left" width="55%">
+			                                            Descripción
+			                                        </th>
+			                                <th class="text-center" width="12%">
+			                                            Cantidad
+			                                        </th>
+			                                <th class="text-center" width="16%">
+			                                            Precio U
+			                                        </th>
+			                                <th class="text-center" width="15%">
+			                                            Precio Total
+			                                        </th>
+			                            </tr>
+			                        </thead>
+			                        <tbody>
+			                            <t t-set="count" t-value="1"/>
+			                            <tr t-foreach="o.invoice_line_ids" t-as="lines_id" style="font-size:11px;" height="18px">
+			                                <td class="text-center" style="border-top:none;border-bottom:none">
+			                                    <t t-esc="count"/>
+			                                </td>
+			                                <td class="text-left" style="border-top:none;border-bottom:none">
+			                                    <t t-esc="lines_id.name"/>
+			                                </td>
+			                                <td class="text-center" style="border-top:none;border-bottom:none" align="right">
+			                                    <t t-esc="lines_id.quantity"/>
+			                                </td>
+			                                <td style="border-top:none;border-bottom:none" align="center">
+			                                    <span t-field="o.currency_id.symbol" class="pull-left ml8"/>
+			                                    <span t-field="lines_id.price_unit" class="pull-center ml8"/>
+			                                </td>
+			                                <td style="border-top:none;border-bottom:none" align="right" >
+			                                    <span t-field="lines_id.price_subtotal" class="pull-center ml8"/>
+			                                </td>
+			                                <t t-set="count" t-value="count + 1"/>
+			                            </tr>
+			                            <tr>
+			                                <td style="border-top:none;"/>
+			                                <td style="border-top:none;"/>
+			                                <td style="border-top:none;"/>
+			                                <td style="border-top:none;"/>
+			                                <td style="border-top:none;"/>
+			                                <td style="border-top:none;"/>
+			                            </tr>
+			                        </tbody>
+			                    </table>
+			                    <div style="display:inline-block; width:97%">
+			                      <table align="right">
+			                            <tbody>
+			                                <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right" width="90%">
+			                                                Subtotal
+			                                    </td>
+			                                    <td style="font-size:12px" align="right">
+			                                        <span t-field="o.amount_untaxed"/>
+			                                    </td>
+			                                </tr>
+			                                <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right" width="90%">
+			                                                Descuento y Rebajas Otorgadas
+			                                            </td>
+			                                    <td style="font-size:12px" align="right">
+                                                    <span t-field="o.x_desc" class="pull-right ml8"/>
+
+			                                    </td>
+			                                </tr>
+			                                 <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right" width="90%">
+			                                                Importe Exonerado
+			                                            </td>
+			                                    <td style="font-size:12px" align="right">
+                                                    <span t-field="o.x_exonerado" class="pull-right ml8"/>
+			                                    </td>
+			                                </tr>
+			                                <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right" width="90%">
+			                                                Importe Exento
+			                                            </td>
+			                                    <td style="font-size:12px" align="right">
+                                                    <span t-field="o.x_exento" class="pull-right ml8"/>
+			                                    </td>
+			                                </tr>
+			                                <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right" width="90%">
+			                                                Importe Gravado 15%
+			                                            </td>
+			                                    <td style="font-size:12px" align="right">
+			                                            <span t-field="o.x_gravado15" class="pull-right ml8"/>
+			                                    </td>
+			                                </tr>
+			                                <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right" width="90%">
+			                                                Importe Gravado 18%
+			                                            </td>
+			                                    <td style="font-size: 12px;padding:0 20px" align="right">
+			                                            <span t-field="o.x_gravado18" class="pull-right ml8"/>
+
+			                                    </td>
+			                                </tr>
+
+			                                <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right" width="90%">
+			                                                ISV 15%
+			                                            </td>
+			                                    <td style="font-size:12px" class="text-right" align="right">
+			                                        <t t-foreach ="o.amount_by_group" t-as="i">
+                                                 <span t-esc="i[3]" class="pull-right ml8"/>
+                                              </t>
+			                                    </td>
+			                                </tr>
+			                                <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right" width="90%">
+			                                                ISV 18%
+			                                            </td>
+			                                    <td style="font-size:12px" class="text-right" align="right">
+			                                        <span t-field="o.x_isv18" class="pull-right ml8"/>
+			                                    </td>
+			                                </tr>
+			                                <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right"  width="80%">
+			                                            <b>  Total </b>
+			                                            </td>
+			                                    <td style="font-size:12px" align="right">
+			                                        <span t-field="o.amount_total" class="pull-right ml8"/>
+			                                    </td>
+			                                </tr>
+
+			                                <tr>
+			                                    <td style="vertical-align:middle; font-size:12px" class="text-right" align="right"  width="80%">
+			                                               <b> Balance </b>
+			                                            </td>
+			                                    <td style="font-size:12px" align="right">
+			                                        <span t-field="o.amount_residual" class="pull-right ml8"/>
+			                                    </td>
+			                                </tr>
+			                            </tbody>
+			                        </table>
+			                      </div>
+			                     <br></br><br/>
+			                        <div class="text-left" style="border: 1px solid #76858a; display:inline-block; width:100%">
+			                            <span style="padding:5px; font-size:12px">
+			                                <b>SON:</b>
+			                                <t t-esc="o.amount_words" align="left"/>
+			                            </span>
+			                        </div>
+			                        <br></br><br/>
+			                        <div style="display:inline-block; width:100%; text-align:center; font-size:12px">
+			                                      SE COBRARÁ EL 3% MENSUAL SI LA FACTURA NO ES CANCELADA DENTRO DE LAS CONDICIONES DE PAGO ESTABLECIDAS
+			                        </div>
+			                    <br></br>
+			                    <br></br>
+			                    <table class="conditionsTable" style="width:60%;font-size:12px;" align="left">
+			                            <tbody>
+			                                <tr>
+			                                    <td class="align-middle" align="left">
+			                                                N° Correlativo Orden de Compras Excenta
+			                                            </td>
+			                                    <td class="text-left">
+			                                        <t class="text-left;" t-esc="o.exempt_PO"/>
+			                                    </td>
+			                                </tr>
+			                                <tr>
+			                                    <td class="align-middle" align="left">
+			                                                N° Correlativo Carnet Exonerado
+			                                            </td>
+			                                    <td class="text-left">
+			                                        <t t-esc="o.exoneratedCard"/>
+			                                    </td>
+			                                </tr>
+			                                <tr>
+			                                    <td class="align-middle" align="left">
+			                                                N° Registro S.A.G
+			                                            </td>
+			                                    <td class="text-left">
+			                                        <t t-esc="o.regSag"/>
+			                                    </td>
+			                                </tr>
+
+			                            </tbody>
+			                        </table>
+			                        <br></br>
+			                <div  align="left" style="width:90%; display:inline-block;font-size:12px">
+			                  <span style="font-size:8px" align="left"/>
+			                            <br/>Fecha Límite de Emisión:
+			                            <t t-esc="o.cai_expires_shot"/>
+			                            <br/>
+			                               <span class="rango_auto">Rango autorizado:
+			                                  <t t-esc="o.min_number_shot"/>
+			                                    &amp;nbsp;al &amp;nbsp;
+			                                  <t t-esc="o.max_number_shot"/>
+			                                </span>
+			                </div>
+
+			                <br></br>
+			                <div align="left" style="width:90%; display:inline-block; font-size:12px">
+
+			                                        <td style="left: 10%;font-size:10px;" width="13%">ORIGINAL :
+			                                            CLIENTE  |
+			                                        </td>
+			                                        <td style="left: 10%;font-size:10px;" width="13%">COPIA :
+			                                            OBLIGADO TRIBUTARIO EMISOR  |
+			                                        </td>
+			                                        <td style="left: 10%;font-size:10px;" width="13%">COPIA :
+			                                            CONTABILIDAD
+			                                        </td>
+			                                </div>
+			                 <br></br>
+			                 <br></br>
+			                  <span align="left" style="font-size:11px">
+			                     LA FACTURA ES BENEFICIO DE TODOS, EXIJALA
+			                  </span>
+			                 <br></br>
+			                 <br></br>
+
+			                </div>
+			            </div>
+			        </div>
+		       </t>
+        </template>
+    </data>
+</odoo>
+
+
+
+
+

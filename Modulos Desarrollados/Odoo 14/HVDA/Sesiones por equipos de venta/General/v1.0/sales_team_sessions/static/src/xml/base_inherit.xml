@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <template xml:space="preserve">
+    <t t-extend="FormView.buttons">
+      <t t-jquery=".o_form_button_edit" t-operation="replace">
+        <!-- Ocultar el botón de Editar en las sesiones de venta -->
+        <t t-if="widget.modelName != 'salesteam.session'">
+          <t t-if="widget.modelName != 'salesteam.payment'">
+            <button t-if="widget.is_action_enabled('edit')" type="button"
+                    class="btn btn-primary o_form_button_edit" accesskey="a">
+                Edit
+            </button>
+          </t>
+        </t>
+      </t>
+    </t>
+  </template>

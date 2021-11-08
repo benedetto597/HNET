@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_form_inherit_sale_stock" model="ir.ui.view">
+            <field name="name">sale.order.form.sale.dropshipping</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="team_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <!-- Incluir para la version del Hospital Vicente D'antoni
+                <field name="team_id" position="attributes">
+                    <! El campo de equipo de venta en la orden de venta es obligatorio sino es venta directa 
+                            o si la venta directa no tiene equipo de ventas >
+                    <attribute name="attrs">{'required': ['&', ('is_direct_sale' ,'=', False), ('direct_sale', '!=', 1)]}</attribute>
+                </field>
+                <xpath expr="//field[@name='team_id']" position="before">
+                    <! El campo de venta directa en la orden de venta es obligatorio si el campo is_direct_sale es TRUE>
+                    <field name="direct_sale" string="Tipo de Venta Directa" attrs="{'required': [('is_direct_sale','=',True)] }"/>
+                </xpath>
+                    <! El campo is_diect_sale determina si la venta es una venta directa>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="is_direct_sale" string="Venta Directa"/>
+                </xpath>
+                -->
+           </field>
+        </record>
+
+        <record id="view_order_form_inherit_sale_stock" model="ir.ui.view">
+            <field name="name">sale.order.tree.inherit.payment</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="amount_total" position="before">
+                    <field name="payment_method_selected"/>
+                </field>
+                <field name="activity_ids" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+           </field>
+        </record>
+    </data>
+</odoo>

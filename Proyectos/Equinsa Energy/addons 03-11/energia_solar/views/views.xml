@@ -1,0 +1,123 @@
+<odoo>
+  <data>
+
+    <!-- Tree view Table entry -->
+    <record id="tabla_entrada_vista_arbol" model="ir.ui.view">
+      <field name="name">datos.para.facturacion.enee.tree.view</field>
+      <field name="model">table.entry</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="factura"/>
+          <field name="cliente"/>
+            <field name="ahorro_acumulado_anterior"/>
+          <field name="f_lectura_actual"/>
+          <field name="f_lectura_anterior"/>
+          <field name="lectura_actual"/>
+          <field name="lectura_anterior"/>
+          <field name="kwh_excendentes"/>
+          <field name="saldo_anterior_amortizacion"/>
+          <field name="total_lps_enee"/>
+          <field name="total_kwh_enee"/>
+          <field name="tasa_cambio"/>
+        </tree>
+      </field>
+    </record>
+      <!-- Tree view Table entry -->
+      <record model="ir.ui.view" id="view_product_margin_graph">
+        <field name="name">historico.consumo.kwh.graph</field>
+        <field name="model">table.entry</field>
+        <field name="arch" type="xml">
+            <graph string="Historico de Consumo KWH" type="bar">
+                <field name="kwh_excendentes" type="measure" />
+                <field name="f_lectura_actual" type="col"/>
+
+            </graph>
+        </field>
+    </record>
+
+     <!-- form view Table entry-->
+        <record id="client_holder_form_view" model="ir.ui.view">
+            <field name="name">Datos.para.Facturacion.enee.form.view</field>
+            <field name="model">table.entry</field>
+            <field name="arch" type="xml">
+                <form string="Datos para Facturacion ENEE" create="false" edit="true">
+                    <sheet string="RECIBO ENEE">
+                        <group>
+                            <group string="Factura Odoo">
+                                <field name="factura"/>
+                                <field name="cliente"/>
+                                <field name="f_mes_pertence"/>
+                            </group>
+                            <group string="Fecha de lecturas ENEE">
+                                <field name="f_lectura_actual"/>
+                                <field name="f_lectura_anterior"/>
+                            </group>
+
+                        </group>
+                        <group>
+                            <group string="Totales ENEE">
+                                <field name="total_lps_enee"/>
+                                <field name="total_kwh_enee"/>
+                            </group>
+
+                            <group string="Lecturas ENEE">
+                                <field name="lectura_actual"/>
+                                <field name="lectura_anterior"/>
+                            </group>
+
+                            <group>
+                                <field name="saldo_anterior_amortizacion"/>
+                                <field name="kwh_excendentes"/>
+                            </group>
+                            <group>
+                                <field name="tasa_cambio"/>
+                                <field name="ahorro_acumulado_anterior"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Otros">
+                                <div>
+                                     <form string="Campos Calculados">
+                                            <group>
+                                                <group>
+                                                    <field name="tarifa_equinsa" readonly="1"/>
+                                                    <field name="tarifa_enee" readonly="1"/>
+                                                    <field name="ahorro_tarifa" readonly="1"/>
+                                                    <field name="ahorro_acumulado" readonly="1"/>
+                                                    <field name="kwh_generados" readonly="1"/>
+                                                    <field name="kwh_facturados" readonly="1"/>
+                                                    <field name="indicador_ambiental" readonly="1"/>
+                                                    <field name="subtotal" readonly="1"/>
+                                                </group>
+
+                                                <group>
+                                                    <field name="kilometros" readonly="1"/>
+                                                    <field name="co2_arbol" readonly="1"/>
+                                                    <field name="galones_agua" readonly="1"/>
+                                                    <field name="amortizacion_dolares" readonly="1"/>
+                                                    <field name="saldo_actual_amortizacion" readonly="1"/>
+                                                    <field name="total_amortizacion" readonly="1"/>
+                                                    <field name="total_oym_granja" readonly="1"/>
+                                                </group>
+                                            </group>
+                                        </form>
+                                </div>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+    <!-- actions table entry -->
+    <record model="ir.actions.act_window" id="tabla_entrada_action">
+      <field name="name">Datos para Facturacion ENEE</field>
+      <field name="res_model">table.entry</field>
+      <field name="view_mode">tree,form,graph</field>
+    </record>
+
+    <!-- Add menu item to subscripciones - informe-->
+    <menuitem id="table_entry_menu" name="Datos de Factura ENEE" action="tabla_entrada_action" parent="sale_subscription.menu_sale_subscription_report" sequence="100"/>
+  </data>
+</odoo>

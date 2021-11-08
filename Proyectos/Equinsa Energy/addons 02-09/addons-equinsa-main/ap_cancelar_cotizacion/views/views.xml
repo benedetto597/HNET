@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="ap_cancelar_cotizacion.list">
+      <field name="name">ap_cancelar_cotizacion list</field>
+      <field name="model">ap_cancelar_cotizacion.ap_cancelar_cotizacion</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="ap_cancelar_cotizacion.action_window">
+      <field name="name">ap_cancelar_cotizacion window</field>
+      <field name="res_model">ap_cancelar_cotizacion.ap_cancelar_cotizacion</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="ap_cancelar_cotizacion.action_server">
+      <field name="name">ap_cancelar_cotizacion server</field>
+      <field name="model_id" ref="model_ap_cancelar_cotizacion_ap_cancelar_cotizacion"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="ap_cancelar_cotizacion" id="ap_cancelar_cotizacion.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="ap_cancelar_cotizacion.menu_1" parent="ap_cancelar_cotizacion.menu_root"/>
+    <menuitem name="Menu 2" id="ap_cancelar_cotizacion.menu_2" parent="ap_cancelar_cotizacion.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="ap_cancelar_cotizacion.menu_1_list" parent="ap_cancelar_cotizacion.menu_1"
+              action="ap_cancelar_cotizacion.action_window"/>
+    <menuitem name="Server to list" id="ap_cancelar_cotizacion" parent="ap_cancelar_cotizacion.menu_2"
+              action="ap_cancelar_cotizacion.action_server"/>
+-->
+  </data>
+</odoo>
