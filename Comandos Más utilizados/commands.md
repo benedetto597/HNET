@@ -8,7 +8,7 @@
 ___
 ___
 # Comandos más utilizados
-___
+
 ### Entorno de trabajo - venv
 * Active el entorno con el siguiente comando:
 
@@ -31,6 +31,8 @@ sudo chown -R your_username:your_username path/to/virtuaelenv/
 ```
 pip3 install -r odoo/requirements.txt
 ```
+
+___
 
 ### Eliminar Odoo por completo 
 
@@ -87,6 +89,7 @@ sudo rm -rf /etc/postgresql-common/
 
 sudo rm -rf /var/lib/postgresql/
 ```
+___
 
 ### Base de Datos - PostgreSQL 
 * Resolver error de autenticación --> Error: FATAL: Peer authentication failed for user "odoo 14"
@@ -104,7 +107,12 @@ sudo rm -rf /var/lib/postgresql/
         ```
         sudo service postgresql restart
         ```
-
+    4. Comandos básicos de psql
+        ```py
+        \l # Listar las bases de datos
+        psql -l # Alternativa Listar las bases de datos
+        \q # Salir de la terminal psql
+        ```
 ______
 ______
 ### Odoo 13
